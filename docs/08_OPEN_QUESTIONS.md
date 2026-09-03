@@ -11,6 +11,8 @@
 ## Gotchi
 
 - Hunger scale direction: `0 = full`, `100 = starving`.
+- Main UI displays `full = 100 - hunger`; feeding fills this bar.
+- Feeding does not increase happiness in MVP.
 - Death is postponed after first playable build.
 - Evolution is postponed after first playable build.
 - Pet appears during Lines as a compact expression/status indicator.

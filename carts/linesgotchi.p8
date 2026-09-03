@@ -101,6 +101,10 @@ function clamp(v,lo,hi)
  return max(lo,min(hi,v))
 end
 
+function full()
+ return 100-pet.hunger
+end
+
 function update_pet()
  if btnp(0) then menu_i=max(1,menu_i-1) end
  if btnp(1) then menu_i=min(4,menu_i+1) end
@@ -116,8 +120,7 @@ end
 function feed_pet()
  pet.hunger=clamp(pet.hunger-25,0,100)
  pet.weight=clamp(pet.weight+1,1,99)
- pet.happy=clamp(pet.happy+2,0,100)
- msg="fed +full +weight"
+ msg="fed +full"
 end
 
 function start_lines()
@@ -343,31 +346,41 @@ function is_full()
 end
 
 function draw_pet_screen()
+ cls(13)
  title("linesgotchi")
- draw_pet(52,34)
- print("hunger "..pet.hunger,6,78,7)
- print("happy  "..pet.happy,6,86,7)
- draw_bar(58,78,54,4,pet.hunger,8)
- draw_bar(58,86,54,4,pet.happy,11)
+ panel(6,17,121,101,1,5)
+ draw_pet(46,29)
+ print("full",14,75,7)
+ print("mood",14,86,7)
+ draw_bar(45,75,64,5,full(),11)
+ draw_bar(45,86,64,5,pet.happy,10)
+ print(full(),112,75,11)
+ print(pet.happy,112,86,10)
  local items={"feed","play","stats","records"}
  for i=1,4 do
   local x=4+(i-1)*31
-  rectfill(x,108,x+28,119,i==menu_i and 6 or 5)
-  print(items[i],x+3,112,i==menu_i and 7 or 6)
+  local c=i==menu_i and 10 or 1
+  local tc=i==menu_i and 0 or 7
+  rectfill(x,108,x+28,120,c)
+  rect(x,108,x+28,120,7)
+  print(items[i],x+3,112,tc)
  end
- if msg~="" then print(msg,8,96,10) end
- print("left/right  o:ok",20,123,13)
+ if msg~="" then print(msg,37,96,10) end
+ print("left/right  o:ok",20,123,1)
 end
 
 function draw_lines_screen()
+ cls(1)
  title("play lines")
- rectfill(0,116,127,127,0)
- print("score "..score,78,20,7)
- print("h"..pet.hunger,78,30,8)
- print("j"..pet.happy,78,38,11)
- draw_mini_pet(102,55)
- print("x:end",82,92,13)
- print(msg,78,104,10)
+ panel(0,16,76,92,0,5)
+ panel(79,16,126,111,1,5)
+ print("score",85,23,6)
+ print(score,85,31,7)
+ print("full "..full(),85,45,11)
+ print("mood "..pet.happy,85,54,10)
+ draw_mini_pet(103,75)
+ print("x end",88,95,13)
+ print(msg,83,105,10)
  for y=1,bs do
   for x=1,bs do
    local px=ox+(x-1)*cs
@@ -388,78 +401,105 @@ function draw_lines_screen()
 end
 
 function draw_result_screen()
+ cls(13)
  title("result")
- print(result_reason,42,24,10)
- print("score      "..score,18,40,7)
- print("lines      "..session_lines,18,50,7)
- print("best line  "..session_best,18,60,7)
- print("hunger     "..pet.hunger,18,76,8)
- print("happy      "..pet.happy,18,86,11)
- if new_best then print("new/local best",28,100,10) end
- print("o/x: pet",42,118,13)
+ panel(14,22,113,106,1,5)
+ print(result_reason,42,30,10)
+ print("score",24,46,6) print(score,72,46,7)
+ print("lines",24,56,6) print(session_lines,72,56,7)
+ print("best",24,66,6) print(session_best,72,66,7)
+ print("full",24,80,6) print(full(),72,80,11)
+ print("mood",24,90,6) print(pet.happy,72,90,10)
+ if new_best then print("new best",45,101,10) end
+ print("o/x: pet",42,118,1)
 end
 
 function draw_stats_screen()
+ cls(13)
  title("stats")
- print("< stats      records >",8,18,13)
- stat_line("hunger",pet.hunger,30,8)
- stat_line("happy",pet.happy,42,11)
- stat_line("health",pet.health,54,12)
- stat_line("discipline",pet.discipline,66,10)
- stat_line("weight",pet.weight,78,9)
- stat_line("age",pet.age,90,7)
- print("o/x: pet",42,118,13)
+ panel(10,20,117,104,1,5)
+ print("< stats      records >",8,15,1)
+ stat_line("full",full(),31,11)
+ stat_line("mood",pet.happy,43,10)
+ stat_line("health",pet.health,55,12)
+ stat_line("discip",pet.discipline,67,9)
+ print("weight",19,82,7) print(pet.weight,82,82,9)
+ print("age",19,94,7) print(pet.age,82,94,7)
+ print("o/x: pet",42,118,1)
 end
 
 function draw_records_screen()
+ cls(13)
  title("records")
- print("< stats      records >",8,18,13)
- print("hi-score    "..hi_score,18,38,7)
- print("games       "..games_played,18,50,7)
- print("total lines "..total_lines,18,62,7)
- print("best line   "..best_line,18,74,7)
+ panel(10,20,117,104,1,5)
+ print("< stats      records >",8,15,1)
+ print("hi-score",20,36,6) print(hi_score,75,36,7)
+ print("games",20,50,6) print(games_played,75,50,7)
+ print("lines",20,64,6) print(total_lines,75,64,7)
+ print("best line",20,78,6) print(best_line,75,78,7)
  print("hall/species later",22,94,13)
- print("o/x: pet",42,118,13)
+ print("o/x: pet",42,118,1)
 end
 
 function title(t)
- rectfill(0,0,127,12,0)
+ rectfill(0,0,127,11,0)
+ line(0,12,127,12,5)
  print(t,4,4,7)
 end
 
+function panel(x0,y0,x1,y1,fill,edge)
+ rectfill(x0,y0,x1,y1,fill)
+ rect(x0,y0,x1,y1,edge)
+ rect(x0+1,y0+1,x1-1,y1-1,6)
+end
+
 function draw_bar(x,y,w,h,v,col)
+ v=clamp(v,0,100)
+ rectfill(x,y,x+w,y+h,0)
  rect(x,y,x+w,y+h,5)
- rectfill(x+1,y+1,x+1+flr((w-2)*v/100),y+h-1,col)
+ local fw=flr((w-2)*v/100)
+ if fw>0 then
+  rectfill(x+1,y+1,x+fw,y+h-1,col)
+ end
 end
 
 function stat_line(name,v,y,col)
- print(name,14,y,7)
- print(v,70,y,col)
- draw_bar(86,y,32,4,v,col)
+ print(name,19,y,7)
+ print(v,62,y,col)
+ draw_bar(82,y,28,4,v,col)
 end
 
 function draw_pet(x,y)
  local sad=pet.hunger>75 or pet.happy<25
- circfill(x+12,y+12,12,12)
- circfill(x+8,y+10,2,0)
- circfill(x+16,y+10,2,0)
+ rectfill(x+8,y+10,x+30,y+30,12)
+ rectfill(x+11,y+7,x+16,y+12,12)
+ rectfill(x+22,y+7,x+27,y+12,12)
+ rect(x+8,y+10,x+30,y+30,7)
+ circfill(x+14,y+18,2,0)
+ circfill(x+24,y+18,2,0)
+ pset(x+14,y+17,7)
+ pset(x+24,y+17,7)
  if sad then
-  line(x+8,y+18,x+16,y+18,0)
+  line(x+15,y+25,x+23,y+25,0)
  else
-  line(x+8,y+17,x+12,y+20,0)
-  line(x+12,y+20,x+16,y+17,0)
+  line(x+15,y+24,x+19,y+27,0)
+  line(x+19,y+27,x+23,y+24,0)
  end
- rectfill(x+5,y+25,x+19,y+37,12)
- line(x+5,y+29,x,y+34,12)
- line(x+19,y+29,x+24,y+34,12)
+ rectfill(x+12,y+31,x+26,y+43,12)
+ rect(x+12,y+31,x+26,y+43,7)
+ line(x+12,y+35,x+5,y+39,12)
+ line(x+26,y+35,x+33,y+39,12)
+ rectfill(x+14,y+44,x+17,y+46,5)
+ rectfill(x+21,y+44,x+24,y+46,5)
 end
 
 function draw_mini_pet(x,y)
  local col=12
  if pet.hunger>80 then col=8 end
- circfill(x,y,8,col)
- circfill(x-3,y-2,1,0)
- circfill(x+3,y-2,1,0)
+ rectfill(x-7,y-7,x+7,y+7,col)
+ rect(x-7,y-7,x+7,y+7,7)
+ pset(x-3,y-2,0)
+ pset(x+3,y-2,0)
  if pet.hunger>80 then
   line(x-3,y+4,x+3,y+4,0)
  else
