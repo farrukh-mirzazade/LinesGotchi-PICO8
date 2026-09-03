@@ -1,0 +1,16 @@
+# PICO-8 / local exports
+builds/
+exports/
+*.p8.png
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs/temp
+*.log
+tmp/
+temp/
+

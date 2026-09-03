@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PICO-8: open LinesGotchi cart",
+      "type": "shell",
+      "command": "/home/farrukh/.local/bin/pico8",
+      "args": [
+        "${workspaceFolder}/carts/linesgotchi.p8"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "PICO-8: run LinesGotchi cart",
+      "type": "shell",
+      "command": "/home/farrukh/.local/bin/pico8",
+      "args": [
+        "-run",
+        "${workspaceFolder}/carts/linesgotchi.p8"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
+
