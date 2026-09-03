@@ -19,9 +19,9 @@ s_records=4
 
 -- lines config
 bs=8
-cs=9
-ox=2
-oy=22
+cs=8
+ox=7
+oy=26
 colors={8,10,11,12,14}
 dxs={1,0,1,1}
 dys={0,1,1,-1}
@@ -346,97 +346,106 @@ function is_full()
 end
 
 function draw_pet_screen()
- cls(13)
+ cls(6)
  title("linesgotchi")
- panel(6,17,121,101,1,5)
- draw_pet(46,29)
- print("full",14,75,7)
- print("mood",14,86,7)
- draw_bar(45,75,64,5,full(),11)
- draw_bar(45,86,64,5,pet.happy,10)
- print(full(),112,75,11)
- print(pet.happy,112,86,10)
- local items={"feed","play","stats","records"}
+ panel(7,15,120,96,7,5)
+ rectfill(13,21,114,90,3)
+ rect(13,21,114,90,0)
+ draw_pet(45,25)
+ print("full",21,71,7)
+ print("mood",21,81,7)
+ draw_bar(46,71,49,4,full(),11)
+ draw_bar(46,81,49,4,pet.happy,10)
+ print(full(),99,71,11)
+ print(pet.happy,99,81,10)
+ local items={"feed","play","stat","rec"}
  for i=1,4 do
-  local x=4+(i-1)*31
-  local c=i==menu_i and 10 or 1
+  local x=5+(i-1)*31
+  local c=i==menu_i and 10 or 0
   local tc=i==menu_i and 0 or 7
-  rectfill(x,108,x+28,120,c)
-  rect(x,108,x+28,120,7)
-  print(items[i],x+3,112,tc)
+  rectfill(x,105,x+27,118,c)
+  rect(x,105,x+27,118,7)
+  print(items[i],x+5,110,tc)
  end
- if msg~="" then print(msg,37,96,10) end
- print("left/right  o:ok",20,123,1)
+ if msg~="" then print(msg,42,96,0) end
+ print("left/right  o ok",22,122,1)
 end
 
 function draw_lines_screen()
- cls(1)
+ cls(6)
  title("play lines")
- panel(0,16,76,92,0,5)
- panel(79,16,126,111,1,5)
+ panel(4,18,73,91,7,5)
+ rectfill(8,23,70,86,0)
+ panel(78,18,123,102,7,5)
  print("score",85,23,6)
- print(score,85,31,7)
- print("full "..full(),85,45,11)
- print("mood "..pet.happy,85,54,10)
- draw_mini_pet(103,75)
- print("x end",88,95,13)
- print(msg,83,105,10)
+ print(score,85,31,0)
+ print("full",85,45,6)
+ print(full(),106,45,11)
+ print("mood",85,55,6)
+ print(pet.happy,106,55,10)
+ draw_mini_pet(101,75)
+ print("x end",89,94,5)
+ print(msg,84,106,0)
  for y=1,bs do
   for x=1,bs do
    local px=ox+(x-1)*cs
    local py=oy+(y-1)*cs
-   rect(px,py,px+7,py+7,5)
+   rect(px,py,px+6,py+6,5)
    local i=idx(x,y)
    if b[i]>0 then
-    circfill(px+4,py+4,3,colors[b[i]])
-    circ(px+4,py+4,3,7)
+    circfill(px+3,py+3,3,colors[b[i]])
+    pset(px+2,py+2,7)
+    pset(px+4,py+2,7)
    end
-   if i==sel then rect(px-1,py-1,px+8,py+8,10) end
+   if i==sel then rect(px-1,py-1,px+7,py+7,10) end
   end
  end
  local cp_x=ox+(cx-1)*cs
  local cp_y=oy+(cy-1)*cs
- rect(cp_x-2,cp_y-2,cp_x+9,cp_y+9,7)
- print("o:pick/move",2,120,7)
+ rect(cp_x-2,cp_y-2,cp_x+8,cp_y+8,7)
+ print("o pick/move",6,121,1)
 end
 
 function draw_result_screen()
- cls(13)
+ cls(6)
  title("result")
- panel(14,22,113,106,1,5)
+ panel(15,20,112,104,7,5)
+ rectfill(21,26,106,98,3)
  print(result_reason,42,30,10)
- print("score",24,46,6) print(score,72,46,7)
- print("lines",24,56,6) print(session_lines,72,56,7)
- print("best",24,66,6) print(session_best,72,66,7)
- print("full",24,80,6) print(full(),72,80,11)
- print("mood",24,90,6) print(pet.happy,72,90,10)
+ print("score",28,46,7) print(score,72,46,10)
+ print("lines",28,56,7) print(session_lines,72,56,10)
+ print("best",28,66,7) print(session_best,72,66,10)
+ print("full",28,80,7) print(full(),72,80,11)
+ print("mood",28,90,7) print(pet.happy,72,90,10)
  if new_best then print("new best",45,101,10) end
  print("o/x: pet",42,118,1)
 end
 
 function draw_stats_screen()
- cls(13)
+ cls(6)
  title("stats")
- panel(10,20,117,104,1,5)
+ panel(12,19,115,104,7,5)
+ rectfill(18,25,109,98,3)
  print("< stats      records >",8,15,1)
- stat_line("full",full(),31,11)
- stat_line("mood",pet.happy,43,10)
- stat_line("health",pet.health,55,12)
- stat_line("discip",pet.discipline,67,9)
- print("weight",19,82,7) print(pet.weight,82,82,9)
- print("age",19,94,7) print(pet.age,82,94,7)
+ stat_line("full",full(),32,11)
+ stat_line("mood",pet.happy,44,10)
+ stat_line("health",pet.health,56,12)
+ stat_line("discip",pet.discipline,68,9)
+ print("weight",23,83,7) print(pet.weight,83,83,9)
+ print("age",23,93,7) print(pet.age,83,93,7)
  print("o/x: pet",42,118,1)
 end
 
 function draw_records_screen()
- cls(13)
+ cls(6)
  title("records")
- panel(10,20,117,104,1,5)
+ panel(12,19,115,104,7,5)
+ rectfill(18,25,109,98,3)
  print("< stats      records >",8,15,1)
- print("hi-score",20,36,6) print(hi_score,75,36,7)
- print("games",20,50,6) print(games_played,75,50,7)
- print("lines",20,64,6) print(total_lines,75,64,7)
- print("best line",20,78,6) print(best_line,75,78,7)
+ print("hi-score",24,36,7) print(hi_score,76,36,10)
+ print("games",24,50,7) print(games_played,76,50,10)
+ print("lines",24,64,7) print(total_lines,76,64,10)
+ print("best",24,78,7) print(best_line,76,78,10)
  print("hall/species later",22,94,13)
  print("o/x: pet",42,118,1)
 end
@@ -448,9 +457,10 @@ function title(t)
 end
 
 function panel(x0,y0,x1,y1,fill,edge)
+ rectfill(x0+2,y0+2,x1+2,y1+2,5)
  rectfill(x0,y0,x1,y1,fill)
  rect(x0,y0,x1,y1,edge)
- rect(x0+1,y0+1,x1-1,y1-1,6)
+ rect(x0+1,y0+1,x1-1,y1-1,7)
 end
 
 function draw_bar(x,y,w,h,v,col)
@@ -471,26 +481,26 @@ end
 
 function draw_pet(x,y)
  local sad=pet.hunger>75 or pet.happy<25
- rectfill(x+8,y+10,x+30,y+30,12)
- rectfill(x+11,y+7,x+16,y+12,12)
- rectfill(x+22,y+7,x+27,y+12,12)
- rect(x+8,y+10,x+30,y+30,7)
+ rectfill(x+11,y+10,x+29,y+28,12)
+ rectfill(x+13,y+7,x+17,y+11,12)
+ rectfill(x+23,y+7,x+27,y+11,12)
+ rect(x+11,y+10,x+29,y+28,7)
  circfill(x+14,y+18,2,0)
- circfill(x+24,y+18,2,0)
+ circfill(x+26,y+18,2,0)
  pset(x+14,y+17,7)
- pset(x+24,y+17,7)
+ pset(x+26,y+17,7)
  if sad then
-  line(x+15,y+25,x+23,y+25,0)
+  line(x+16,y+24,x+24,y+24,0)
  else
-  line(x+15,y+24,x+19,y+27,0)
-  line(x+19,y+27,x+23,y+24,0)
+  line(x+16,y+23,x+20,y+26,0)
+  line(x+20,y+26,x+24,y+23,0)
  end
- rectfill(x+12,y+31,x+26,y+43,12)
- rect(x+12,y+31,x+26,y+43,7)
- line(x+12,y+35,x+5,y+39,12)
- line(x+26,y+35,x+33,y+39,12)
- rectfill(x+14,y+44,x+17,y+46,5)
- rectfill(x+21,y+44,x+24,y+46,5)
+ rectfill(x+14,y+29,x+26,y+40,12)
+ rect(x+14,y+29,x+26,y+40,7)
+ line(x+14,y+33,x+8,y+36,12)
+ line(x+26,y+33,x+32,y+36,12)
+ rectfill(x+15,y+41,x+18,y+43,5)
+ rectfill(x+22,y+41,x+25,y+43,5)
 end
 
 function draw_mini_pet(x,y)
