@@ -2,27 +2,25 @@
 
 ## Lines
 
-- Board size: `7x7`, `8x8`, or `9x9`?
-- Number of colors: `5`, `6`, or `7`?
-- Clear length: fixed at `5`?
-- Diagonals: enabled from the start?
-- New balls per non-scoring move: `3`?
+- Board size: `8x8` for MVP.
+- Number of colors: `5` for MVP.
+- Clear length: fixed at `5+` for MVP.
+- Diagonals: enabled from the start.
+- New balls per non-scoring move: `3`.
 
 ## Gotchi
 
-- Hunger scale direction: does `0` mean full or starving?
-- Should death exist in the first playable build?
-- Should evolution exist in the first playable build?
-- Should the pet appear during Lines in MVP or only after MVP?
+- Hunger scale direction: `0 = full`, `100 = starving`.
+- Death is postponed after first playable build.
+- Evolution is postponed after first playable build.
+- Pet appears during Lines as a compact expression/status indicator.
 - Should weight affect health immediately?
 
 ## Records
 
-- Save only high score in MVP or also total lines/games?
+- MVP saves high score, games played, total lines, and best line.
 - Include Hall of Gotchi in first playable build or later?
 
 ## Visual Style
 
-- Tamagotchi LCD-inspired limited look?
-- Full-color PICO-8 pixel-toy look?
-
+- MVP uses full-color PICO-8 pixel-toy look with simple Tamagotchi-like layout.
