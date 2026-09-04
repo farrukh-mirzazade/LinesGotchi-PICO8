@@ -140,6 +140,12 @@ function _init()
  snap("result")
  scr=s_lines score=32767 pet.happy=100 pet.hunger=0
  snap("large_values")
+ empty_board() msg="" sel=0 cx=8 cy=8
+ for i=1,5 do b[i]=i end
+ next_balls={1,2,3}
+ snap("five_colours_a")
+ next_balls={4,5,1}
+ snap("five_colours_b")
  printh("PASS: "..passed.." native checks")
  extcmd("shutdown")
 end
@@ -167,3 +173,17 @@ for name in ("pet", "lines", "stats", "records", "settings", "quit", "result"):
             assert all(pixels[x + dx, y + dy] == pixels[x, y]
                        for dx in range(4) for dy in range(4)), name + " pixel grid"
 print("Native screenshots:", OUT)
+
+# The queue must use the same unscaled sprite and background as the board.
+for name, colours in (("five_colours_a", (1, 2, 3)),
+                      ("five_colours_b", (4, 5, 1))):
+    pixels = Image.open(OUT / (name + ".png")).convert("RGB").load()
+    for slot, colour in enumerate(colours):
+        board_x = (8 + (colour - 1) * 9) * 4
+        queue_x = (90 + slot * 10) * 4
+        for y in range(32):
+            for x in range(32):
+                assert pixels[board_x+x, 23*4+y] == pixels[queue_x+x, 93*4+y], (
+                    name, slot, "queue sprite differs from board", x, y
+                )
+print("PASS: all five queue colours match board sprites pixel-for-pixel")

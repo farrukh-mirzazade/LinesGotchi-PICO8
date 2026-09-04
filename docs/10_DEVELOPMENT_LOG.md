@@ -101,3 +101,13 @@ Commits already published:
   dimensions, palette count and integer pixel grid. Tracked six review images.
 - Exported the HTML build successfully. Full visual parity is not claimed;
   details and remaining limitations are in [[13_NATIVE_VISUAL_PASS]].
+
+## 2026-09-05 - Lines Queue And Colour Polish
+
+- Responded to misaligned NEXT balls and dull colours: added a shared centred
+  tray, equal spacing, brighter ball surfaces and a lighter board.
+- Kept exactly five playable colours and native 8x8 sprite rendering. No game
+  rules, pet sprites, other screen layouts or protected functions changed.
+- Re-ran 16 passing native regression checks and added pixel-for-pixel
+  queue/board comparisons covering all five colours.
+- Saved actual PICO-8 review captures under assets/review/lines-polish/.

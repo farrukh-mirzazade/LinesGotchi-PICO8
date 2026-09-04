@@ -76,3 +76,21 @@ The supplied sheet has smooth shading and detail beyond these native assets.
 The 24x24 pet, room decoration, plastic highlights and icon contours are still
 simpler than that illustration. User acceptance is outstanding. No statement
 of one-to-one visual parity or completed exhaustive gameplay QA is made.
+
+## Lines Polish: Five Colours And Queue
+
+The follow-up changes only the Lines presentation and ball artwork:
+
+- One centred preview tray (x=88..119, y=92..101), centred NEXT label, and
+  three 8x8 balls at x=90/100/110, y=93. Equal 2px horizontal margins/gaps.
+  A small upward move of the sidebar pet creates room above the bottom bezel.
+- All five playable colours keep the same circular silhouette. A coloured
+  rim, less dark shading and small white highlights increase visible colour.
+  Green uses its vivid native palette value only on the Lines screen.
+- A light board with peach separators improves colour contrast without
+  changing the 8x8 grid, cell pitch, selection or gameplay.
+- The native harness captures both queue combinations needed to cover all
+  five colours. Every pixel of each queued ball matches its board counterpart.
+  All 16 gameplay regression checks still pass.
+- Latest review captures: assets/review/lines-polish/lines.png and
+  assets/review/lines-polish/five_colours.png.

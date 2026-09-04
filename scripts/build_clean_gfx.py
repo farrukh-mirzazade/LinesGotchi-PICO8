@@ -118,16 +118,17 @@ for idx, expr in enumerate(["happy", "neutral", "hungry", "sleepy", "excited"]):
 # 2. PUZZLE BALLS (8x8, sprites 48-54)
 # ----------------------------------------------------------------------
 def make_ball(sid, main_col, shade_col, highlight_col="7", outline_col="1"):
-    # Crisp, symmetrical 8x8 round orb with specular gloss
+    # Bright 8x8 sphere: a coloured rim and a small upper-left specular.
+    # Keep the silhouette identical across all five playable colours.
     rows = [
-        f"..{outline_col}{outline_col}{outline_col}{outline_col}..",
-        f".{outline_col}{main_col}{main_col}{main_col}{main_col}{outline_col}.",
-        f"{outline_col}{highlight_col}{highlight_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
-        f"{outline_col}{highlight_col}{main_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
-        f"{outline_col}{main_col}{main_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
-        f"{outline_col}{main_col}{main_col}{main_col}{shade_col}{shade_col}{shade_col}{outline_col}",
-        f".{outline_col}{shade_col}{shade_col}{shade_col}{shade_col}{outline_col}.",
-        f"..{outline_col}{outline_col}{outline_col}{outline_col}..",
+        f"..{main_col}{main_col}{main_col}{main_col}..",
+        f".{main_col}{highlight_col}{highlight_col}{main_col}{main_col}{main_col}.",
+        f"{main_col}{highlight_col}{main_col}{main_col}{main_col}{main_col}{main_col}{shade_col}",
+        f"{main_col}{main_col}{main_col}{main_col}{main_col}{main_col}{main_col}{shade_col}",
+        f"{main_col}{main_col}{main_col}{main_col}{main_col}{main_col}{main_col}{shade_col}",
+        f"{main_col}{main_col}{main_col}{main_col}{main_col}{main_col}{shade_col}{shade_col}",
+        f".{shade_col}{main_col}{main_col}{main_col}{shade_col}{shade_col}.",
+        f"..{shade_col}{shade_col}{shade_col}{shade_col}..",
     ]
     sprite(sid, rows)
 
