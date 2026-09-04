@@ -15,6 +15,7 @@ This folder is the Obsidian vault for LinesGotchi only.
 - [[09_VISUAL_DIRECTION]]
 - [[10_DEVELOPMENT_LOG]]
 - [[11_FUNCTIONAL_AUDIT]]
+- [[12_DESIGN_CORRECTION]]
 
 ## Current Status
 

@@ -57,4 +57,17 @@ Commits already published:
 - Functional runtime audit: 40 passed, 0 failed.
 - Native PICO-8 HTML export succeeds.
 - `can_reach()` and `clear_lines()` remain unchanged from the protected baseline.
-- Visual changes are paused until the next explicit visual-review task.
+- Visual design correction has resumed; see [[12_DESIGN_CORRECTION]].
+
+## 2026-09-04 - Reference Fidelity Review
+
+- User rejected the bird-like small-eyed pet, rough menu/grid, and empty room.
+- Compared the locked reference directly with the existing preview collage.
+- Identified a flattened body, dark belly band, undersized eyes, undersized room
+  props, and excessive cell bevels as specific discrepancies.
+- Used built-in imagegen with the locked reference to create
+  `assets/design/reference_correction_sheet_v3.png` as a supporting art brief.
+- This generated sheet does not replace the approved reference or the cartridge.
+  Its board geometry is not a valid 8x8 production asset.
+- Recorded production constraints and remaining implementation work in
+  [[12_DESIGN_CORRECTION]]. No gameplay or cartridge changes in this design pass.
