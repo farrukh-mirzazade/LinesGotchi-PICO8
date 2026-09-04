@@ -16,10 +16,12 @@ This folder is the Obsidian vault for LinesGotchi only.
 - [[10_DEVELOPMENT_LOG]]
 - [[11_FUNCTIONAL_AUDIT]]
 - [[12_DESIGN_CORRECTION]]
+- [[13_NATIVE_VISUAL_PASS]]
 
 ## Current Status
 
-The playable MVP is implemented and the functional audit passes 40 checks in
-the local PICO-8 runtime. Gameplay stabilization is complete for the current
-scope. Visual changes are paused pending a separate review against the locked
-reference.
+The native visual adaptation is implemented and awaiting visual acceptance.
+The current reproducible suite passes 16 focused native regression checks.
+Actual PICO-8 screenshots and fidelity limits are recorded in
+[[13_NATIVE_VISUAL_PASS]]. Earlier audit counts are historical, not evidence
+of exhaustive verification of this revision.

@@ -44,145 +44,69 @@ def put(x, y, rows):
                 px(x + xx, y + yy, color)
 
 def sprite(sid, rows):
+    assert len(rows) == 8 and all(len(row) == 8 for row in rows), sid
     put((sid % 16) * 8, (sid // 16) * 8, rows)
 
 # ----------------------------------------------------------------------
 # 1. STARTER PET (24x24 = 3x3 tiles, 5 facial expressions)
 # ----------------------------------------------------------------------
-# Base round body silhouette
-# Colors: 1 = outline, c = light blue, d = shade/belly, 7 = white, 8 = mouth/tongue, e = blush
-
+# Native 24x24 master. Expressions share one limb-free silhouette.
 def draw_pet_body(x0, y0):
-    # Tufts of hair (3 prongs on top)
-    # Middle tuft
-    px(x0 + 11, y0 + 1, "1"); px(x0 + 12, y0 + 1, "1")
-    px(x0 + 11, y0 + 2, "c"); px(x0 + 12, y0 + 2, "c")
-    # Left tuft
-    px(x0 + 9,  y0 + 2, "1"); px(x0 + 10, y0 + 2, "1")
-    px(x0 + 10, y0 + 3, "c")
-    # Right tuft
-    px(x0 + 13, y0 + 2, "1"); px(x0 + 14, y0 + 2, "1")
-    px(x0 + 13, y0 + 3, "c")
-
-    # Body spans (round chubby bean / sphere)
-    spans = [
-        (3, 7, 16),
-        (4, 5, 18),
-        (5, 4, 19),
-        (6, 3, 20),
-        (7, 2, 21),
-        (8, 2, 21),
-        (9, 2, 21),
-        (10, 2, 21),
-        (11, 2, 21),
-        (12, 1, 22),
-        (13, 1, 22),
-        (14, 1, 22),
-        (15, 2, 21),
-        (16, 2, 21),
-        (17, 3, 20),
-        (18, 4, 19),
-        (19, 6, 17),
-    ]
-    for y, x_start, x_end in spans:
-        # Outline
-        px(x0 + x_start, y0 + y, "1")
-        px(x0 + x_end,   y0 + y, "1")
-        # Fill body
-        for x in range(x_start + 1, x_end):
-            # Soft shadow at bottom
-            if y >= 17:
-                px(x0 + x, y0 + y, "1")
-            elif y >= 15:
-                px(x0 + x, y0 + y, "d")
-            else:
-                px(x0 + x, y0 + y, "c")
-
-    # Tiny arms on sides
-    # Left arm
-    px(x0 + 0, y0 + 12, "1"); px(x0 + 0, y0 + 13, "1")
-    px(x0 + 1, y0 + 12, "c"); px(x0 + 1, y0 + 13, "c")
-    # Right arm
-    px(x0 + 23, y0 + 12, "1"); px(x0 + 23, y0 + 13, "1")
-    px(x0 + 22, y0 + 12, "c"); px(x0 + 22, y0 + 13, "c")
-
-    # Tiny feet
-    # Left foot
-    fill(x0 + 6, y0 + 20, x0 + 8, y0 + 20, "1")
-    px(x0 + 7, y0 + 20, "d")
-    px(x0 + 7, y0 + 21, "1")
-    # Right foot
-    fill(x0 + 15, y0 + 20, x0 + 17, y0 + 20, "1")
-    px(x0 + 16, y0 + 20, "d")
-    px(x0 + 16, y0 + 21, "1")
+    put(x0, y0, [
+        ".........11.............",
+        ".........1c1............",
+        "..........1c111.........",
+        ".......111cccc111.......",
+        ".....11cccccccccc11.....",
+        "....1cccccccccccccc1....",
+        "...1cccccccccccccccc1...",
+        "..1cccccccccccccccccc1..",
+        "..1cccccccccccccccccc1..",
+        ".1cccccccccccccccccccc1.",
+        ".1cccccccccccccccccccc1.",
+        ".1cccccccccccccccccccc1.",
+        ".1cccccccccccccccccccc1.",
+        ".1cccccccccccccccccccc1.",
+        ".1cccccccccccccccccccc1.",
+        ".1cccccccccccccccccccc1.",
+        "..1cccccccccccccccccc1..",
+        "..1cccccccccccccccccc1..",
+        "...1cccccccccccccccc1...",
+        "....1cccccccccccccc1....",
+        ".....1cccccccccccc1.....",
+        "......11cccccccc11......",
+        "........11111111........",
+        "........................",
+    ])
+    # One-pixel lower rim, not a dark belly.
+    for x, y in [(4,17),(5,18),(6,19),(7,20),(8,20),(9,21),
+                 (10,21),(11,21),(12,21),(13,21),(14,21),(15,20),(16,20),(17,19)]:
+        px(x0+x, y0+y, "d")
 
 def draw_face(x0, y0, expression):
-    if expression == "happy":
-        # Big glossy anime eyes
-        # Left eye
-        fill(x0 + 5, y0 + 8, x0 + 9, y0 + 12, "1")
-        fill(x0 + 6, y0 + 9, x0 + 8, y0 + 11, "1")
-        # Big white gloss
-        fill(x0 + 6, y0 + 8, x0 + 7, y0 + 9, "7")
-        px(x0 + 8, y0 + 11, "7")
-        # Right eye
-        fill(x0 + 14, y0 + 8, x0 + 18, y0 + 12, "1")
-        fill(x0 + 15, y0 + 9, x0 + 17, y0 + 11, "1")
-        fill(x0 + 15, y0 + 8, x0 + 16, y0 + 9, "7")
-        px(x0 + 17, y0 + 11, "7")
-        # Cute smile with open red mouth
-        fill(x0 + 11, y0 + 13, x0 + 12, y0 + 14, "8")
-        px(x0 + 10, y0 + 13, "1"); px(x0 + 13, y0 + 13, "1")
-        px(x0 + 11, y0 + 15, "1"); px(x0 + 12, y0 + 15, "1")
-
-    elif expression == "neutral":
-        # Same big glossy eyes
-        fill(x0 + 5, y0 + 8, x0 + 9, y0 + 12, "1")
-        fill(x0 + 6, y0 + 8, x0 + 7, y0 + 9, "7")
-        px(x0 + 8, y0 + 11, "7")
-        fill(x0 + 14, y0 + 8, x0 + 18, y0 + 12, "1")
-        fill(x0 + 15, y0 + 8, x0 + 16, y0 + 9, "7")
-        px(x0 + 17, y0 + 11, "7")
-        # Small quiet line mouth
-        fill(x0 + 11, y0 + 13, x0 + 12, y0 + 13, "1")
-
-    elif expression == "hungry":
-        # Worried / hungry eyes (slightly lowered)
-        fill(x0 + 5, y0 + 9, x0 + 9, y0 + 13, "1")
-        fill(x0 + 6, y0 + 9, x0 + 7, y0 + 10, "7")
-        fill(x0 + 14, y0 + 9, x0 + 18, y0 + 13, "1")
-        fill(x0 + 15, y0 + 9, x0 + 16, y0 + 10, "7")
-        # Open wavy hungry mouth (gasping)
-        fill(x0 + 10, y0 + 14, x0 + 13, y0 + 16, "1")
-        fill(x0 + 11, y0 + 15, x0 + 12, y0 + 15, "8")
-
+    if expression == "sleepy":
+        for x in (5,14):
+            put(x0+x, y0+11, ["1....1", ".1111."])
+    else:
+        for x in (4,13):
+            put(x0+x, y0+8, [
+                "..777..",
+                ".77777.",
+                "7711177",
+                "7711117",
+                "7111117",
+                "7111117",
+                ".71117.",
+                "..777..",
+            ])
+    if expression == "hungry":
+        put(x0+10,y0+17, [".11.", "1771", "1111"])
     elif expression == "sleepy":
-        # Closed eyes (cute curved happy / sleepy arcs)
-        px(x0 + 5, y0 + 10, "1"); px(x0 + 9, y0 + 10, "1")
-        fill(x0 + 6, y0 + 11, x0 + 8, y0 + 11, "1")
-        px(x0 + 14, y0 + 10, "1"); px(x0 + 18, y0 + 10, "1")
-        fill(x0 + 15, y0 + 11, x0 + 17, y0 + 11, "1")
-        # Tiny cute mouth
-        px(x0 + 11, y0 + 14, "1"); px(x0 + 12, y0 + 14, "1")
-        # Cute "Zzz"
-        px(x0 + 19, y0 + 6, "7"); px(x0 + 20, y0 + 6, "7")
-        px(x0 + 19, y0 + 7, "7"); px(x0 + 20, y0 + 8, "7")
-
+        put(x0+10,y0+17, [".11.", "1..1"])
     elif expression == "excited":
-        # Big super sparkly eyes + blush
-        fill(x0 + 5, y0 + 7, x0 + 9, y0 + 11, "1")
-        fill(x0 + 6, y0 + 7, x0 + 7, y0 + 8, "7")
-        px(x0 + 8, y0 + 10, "7")
-        fill(x0 + 14, y0 + 7, x0 + 18, y0 + 11, "1")
-        fill(x0 + 15, y0 + 7, x0 + 16, y0 + 8, "7")
-        px(x0 + 17, y0 + 10, "7")
-        # Pink blush on cheeks
-        px(x0 + 4, y0 + 12, "e"); px(x0 + 5, y0 + 12, "e")
-        px(x0 + 18, y0 + 12, "e"); px(x0 + 19, y0 + 12, "e")
-        # Big happy open smile
-        fill(x0 + 10, y0 + 12, x0 + 13, y0 + 15, "1")
-        fill(x0 + 11, y0 + 13, x0 + 12, y0 + 14, "8")
-        px(x0 + 11, y0 + 14, "e")
+        put(x0+9,y0+17, ["111111", ".1881.", "..11.."])
+    else:
+        put(x0+10,y0+17, ["1111", ".81."])
 
 # Generate 5 pet faces side-by-side at x = 0, 24, 48, 72, 96, y = 0
 for idx, expr in enumerate(["happy", "neutral", "hungry", "sleepy", "excited"]):
@@ -198,10 +122,10 @@ def make_ball(sid, main_col, shade_col, highlight_col="7", outline_col="1"):
     rows = [
         f"..{outline_col}{outline_col}{outline_col}{outline_col}..",
         f".{outline_col}{main_col}{main_col}{main_col}{main_col}{outline_col}.",
-        f"{outline_col}{highlight_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
-        f"{outline_col}{main_col}{main_col}{main_col}{main_col}{main_col}{outline_col}",
-        f"{outline_col}{main_col}{main_col}{main_col}{main_col}{main_col}{outline_col}",
-        f"{outline_col}{main_col}{shade_col}{shade_col}{shade_col}{shade_col}{outline_col}",
+        f"{outline_col}{highlight_col}{highlight_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
+        f"{outline_col}{highlight_col}{main_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
+        f"{outline_col}{main_col}{main_col}{main_col}{main_col}{main_col}{shade_col}{outline_col}",
+        f"{outline_col}{main_col}{main_col}{main_col}{shade_col}{shade_col}{shade_col}{outline_col}",
         f".{outline_col}{shade_col}{shade_col}{shade_col}{shade_col}{outline_col}.",
         f"..{outline_col}{outline_col}{outline_col}{outline_col}..",
     ]
@@ -241,94 +165,23 @@ sprite(56, [
 # ----------------------------------------------------------------------
 # 3. MENU ICONS (8x8, sprites 64-71)
 # ----------------------------------------------------------------------
-# Home (64)
-sprite(64, [
-    "...11...",
-    "..1771..",
-    ".177771.",
-    "17777771",
-    "17711771",
-    "17711771",
-    "17711771",
-    "11111111",
-])
-# Grid / Play (65)
-sprite(65, [
-    "11111111",
-    "17171711",
-    "11111111",
-    "17171711",
-    "11111111",
-    "17171711",
-    "11111111",
-    "........",
-])
-# Stats / Bars (66)
-sprite(66, [
-    "........",
-    "....11..",
-    "....171.",
-    "..11171.",
-    ".171171.",
-    ".1711711",
-    ".1711717",
-    "11111111",
-])
-# Trophy (67)
-sprite(67, [
-    ".111111.",
-    "1aaaaaa1",
-    "11aaaa11",
-    ".11aa11.",
-    "...11...",
-    "...11...",
-    "..1aa1..",
-    ".111111.",
-])
-# Gear (68)
-sprite(68, [
-    "..1111..",
-    ".171171.",
-    "17177171",
-    "117..711",
-    "117..711",
-    "17177171",
-    ".171171.",
-    "..1111..",
-])
-# D-pad (69)
-sprite(69, [
-    "...11...",
-    "...171..",
-    "11117111",
-    "17777771",
-    "11117111",
-    "...171..",
-    "...11...",
-    "........",
-])
-# Buttons (70)
-sprite(70, [
-    "...88...",
-    "..8888..",
-    ".b....a.",
-    "bbb..aaa",
-    ".b....a.",
-    "..cc11..",
-    "...11...",
-    "........",
-])
-# Cancel / Cross (71)
-sprite(71, [
-    "11....11",
-    ".11..11.",
-    "..1111..",
-    "...11...",
-    "..1111..",
-    ".11..11.",
-    "11....11",
-    "........",
-])
+# Filled silhouettes remain legible at 8x8 in both focus states.
+sprite(64, ["...77...", "..7777..", ".777777.", "77777777",
+            ".777777.", ".77..77.", ".77..77.", ".77..77."])
+sprite(65, ["77.77.77", "77.77.77", "........", "77.77.77",
+            "77.77.77", "........", "77.77.77", "77.77.77"])
+sprite(66, ["......77", "......77", "...77.77", "...77.77",
+            "77.77.77", "77.77.77", "77.77.77", "77.77.77"])
+sprite(67, [".777777.", "77aaaa77", "7.aaaa.7", ".77aa77.",
+            "...aa...", "...77...", "..7777..", ".777777."])
+sprite(68, ["...77...", ".7.77.7.", "..7777..", "777..777",
+            "777..777", "..7777..", ".7.77.7.", "...77..."])
+sprite(69, ["...77...", "...77...", "...77...", "77777777",
+            "77777777", "...77...", "...77...", "...77..."])
+sprite(70, ["...88...", "..8888..", ".b.88.c.", "bbb..ccc",
+            ".b.aa.c.", "..aaaa..", "...aa...", "........"])
+sprite(71, ["7......7", ".7....7.", "..7..7..", "...77...",
+            "...77...", "..7..7..", ".7....7.", "7......7"])
 
 # ----------------------------------------------------------------------
 # 4. STATUS ICONS (8x8, sprites 80-87)
@@ -569,6 +422,29 @@ sprite(136, [
 ])
 
 # ----------------------------------------------------------------------
+# Large room window: native 32x32, tiles 160..163 / 208..211.
+# The map is unused; the shared sprite bank is reserved for room and bezel art.
+fill(0,80,31,111,"4")
+fill(1,81,30,110,"f")
+fill(2,82,29,109,"c")
+fill(15,82,16,109,"4")
+fill(2,96,29,97,"4")
+put(4,86, ["..777...", ".77777..", "7777777."])
+put(19,86, ["..aaa..", ".aaaaa.", "aaaaaaa", "aaaaaaa", ".aaaaa.", "..aaa.."])
+put(3,101, ["...33.......", "..3bb3......", ".3bbbb3.....", "3bbbbbb3....",
+            "bbbbbbbb3333", "bbbbbbbbbbbb", "333333333333", "333333333333"])
+put(17,100, [".....33.....", "....3bb3....", "...3bbbb3...", "..3bbbbbb3..",
+             ".3bbbbbbbb3.", "3bbbbbbbbbb3", "bbbbbbbbbbbb", "333333333333", "333333333333"])
+fill(15,82,16,109,"4")
+fill(2,96,29,97,"f")
+
+# 16x16 hanging portrait in tiles 164/165/180/181.
+put(32,80, [".......44.......", "......4ff4......", ".....4ffff4....."])
+fill(33,83,46,95,"4")
+fill(34,84,45,94,"f")
+fill(35,85,44,93,"7")
+put(36,87, [".ee..ee.", "eeeeeeee", "eeeeeeee", ".eeeeee.", "..eeee..", "...ee..."])
+
 # Export to preview PNG and update Cartridge
 # ----------------------------------------------------------------------
 preview = Image.new("RGB", (W, H))

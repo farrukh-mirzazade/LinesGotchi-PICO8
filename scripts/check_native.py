@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+"""Run isolated PICO-8 regressions and capture the actual cartridge renderer."""
+import hashlib
+import os
+from pathlib import Path
+import subprocess
+from PIL import Image
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "build" / "native-review"
+OUT.mkdir(parents=True, exist_ok=True)
+source = (ROOT / "carts/linesgotchi.p8").read_text()
+baseline = subprocess.check_output(
+    ["git", "show", "f45a081:carts/linesgotchi.p8"], cwd=ROOT, text=True
+)
+for name in ("can_reach", "clear_lines"):
+    def function(text):
+        return text.split("function " + name + "(", 1)[1].split("\nfunction ", 1)[0]
+    assert function(source) == function(baseline), name + " changed"
+    print(name, hashlib.sha256(function(source).encode()).hexdigest())
+
+# No real cartdata is opened or written. Input and save storage are isolated.
+test = r"""
+local original_init=_init
+local storage={}
+cartdata=function() end
+dset=function(k,v) storage[k]=v end
+dget=function(k) return storage[k] or 0 end
+local key=-1
+btnp=function(k) return k==key end
+local passed=0
+function check(ok,label)
+ if not ok then
+  printh("FAIL: "..label)
+  extcmd("shutdown")
+  return
+ end
+ passed+=1
+end
+function empty_board()
+ for i=1,64 do b[i]=0 end
+end
+function snap(name)
+ _draw()
+ flip()
+ extcmd("set_filename",name)
+ extcmd("screen",4)
+end
+function _init()
+ original_init()
+ sound_on=false
+ local h=pet.hunger
+ for i=1,30 do key=4 update_pet() end
+ check(pet.hunger==h,"home does not feed")
+ key=-1
+ start_lines()
+ check(#next_balls==3,"next count")
+ local count=0
+ for v in all(b) do if v>0 then count+=1 end end
+ check(count==5,"initial balls")
+ empty_board()
+ b[1]=1
+ check(can_reach(1,64),"open path")
+ b[2]=1 b[9]=1
+ check(not can_reach(1,64),"blocked path")
+ for direction=1,4 do
+  empty_board()
+  for j=0,4 do
+   local x=direction==2 and 2 or j+1
+   local y=direction==1 and 2 or direction==4 and 8-j or j+1
+   b[idx(x,y)]=1
+  end
+  local n=clear_lines()
+  check(n==5,"five in direction "..direction)
+ end
+ empty_board()
+ b[1]=1 b[2]=1 b[3]=1 b[4]=1
+ check(clear_lines()==0,"four do not clear")
+ empty_board()
+ next_balls={1,2,3}
+ spawn_next_balls()
+ count=0
+ local seen={}
+ for v in all(b) do if v>0 then count+=1 seen[v]=true end end
+ check(count==3 and seen[1] and seen[2] and seen[3],"spawn preview")
+ start_lines()
+ key=5 update_lines()
+ check(quit_confirm and scr==s_lines,"quit asks")
+ update_lines()
+ check(not quit_confirm and scr==s_lines,"quit cancels")
+ key=-1
+ pet.hunger=37 pet.happy=64 pet.weight=12
+ save_state()
+ pet.hunger=0 pet.happy=0 pet.weight=1
+ load_save()
+ check(pet.hunger==37 and pet.happy==64 and pet.weight==12,"save roundtrip")
+ scr=s_settings menu_i=5 settings_i=1 key=4
+ local on=sound_on
+ update_settings()
+ check(sound_on~=on,"sound toggle")
+ sound_on=false
+ settings_i=2 on=hints_on
+ update_settings()
+ check(hints_on~=on,"hints toggle")
+ key=-1 hints_on=true
+ pet.hunger=15 pet.happy=55 pet.weight=10
+ msg="" pet.eating_t=0 pet.sleeping_t=0
+ scr=s_pet menu_i=1
+ snap("pet")
+ for state=0,4 do
+  cls(7)
+  draw_pet_sprite(52,52,state)
+  flip()
+  extcmd("set_filename","expression_"..state)
+  extcmd("screen",4)
+ end
+ start_lines()
+ empty_board()
+ b[idx(7,1)]=1 b[idx(6,3)]=2
+ b[idx(3,6)]=3 b[idx(6,6)]=1 b[idx(5,7)]=3
+ next_balls={1,2,3} score=120
+ snap("lines")
+ sel=idx(7,1) cx=7 cy=1
+ snap("selected")
+ quit_confirm=true
+ snap("quit")
+ quit_confirm=false sel=0
+ msg="no path"
+ snap("message")
+ msg=""
+ scr=s_stats menu_i=3
+ snap("stats")
+ stats_i=2
+ snap("stats_sleep")
+ scr=s_records menu_i=4
+ snap("records")
+ scr=s_settings menu_i=5
+ snap("settings")
+ scr=s_result result_reason="quit"
+ snap("result")
+ scr=s_lines score=32767 pet.happy=100 pet.hunger=0
+ snap("large_values")
+ printh("PASS: "..passed.." native checks")
+ extcmd("shutdown")
+end
+"""
+head, tail = source.split("__gfx__", 1)
+cart = OUT / "review.p8"
+cart.write_text(head + test + "\n__gfx__" + tail)
+env = dict(os.environ, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy")
+result = subprocess.run(
+    [str(Path.home() / ".local/bin/pico8"), "-desktop", str(OUT), "-x", str(cart)],
+    env=env, capture_output=True, text=True, timeout=60,
+)
+print(result.stdout, result.stderr)
+assert result.returncode == 0, "PICO-8 exited with an error"
+assert "PASS: 16 native checks" in result.stdout, "Native checks did not finish"
+assert "FAIL:" not in result.stdout, "Native assertion failed"
+for name in ("pet", "lines", "stats", "records", "settings", "quit", "result"):
+    assert (OUT / (name + ".png")).exists(), "Missing screenshot: " + name
+    image = Image.open(OUT / (name + ".png")).convert("RGB")
+    assert image.size == (512, 512), name + " dimensions"
+    assert 3 < len(image.getcolors(512 * 512)) <= 16, name + " palette"
+    pixels = image.load()
+    for y in range(0, 512, 4):
+        for x in range(0, 512, 4):
+            assert all(pixels[x + dx, y + dy] == pixels[x, y]
+                       for dx in range(4) for dy in range(4)), name + " pixel grid"
+print("Native screenshots:", OUT)

@@ -87,3 +87,17 @@ Commits already published:
   requirements. No claim of a native runtime visual test in this pass.
 - Corrected the obsolete reference instruction mentioning the Baby's feet.
 - Original locked reference, game logic, sprite data and web build unchanged.
+
+## 2026-09-05 - Native Reference Implementation
+
+- Implemented limb-free Baby sprites, room artwork, native-size balls, compact
+  menus, device colours and revised screen layouts in the playable cartridge.
+- Corrected malformed ball rows, rightmost menu overflow, palette resets and
+  selected-ball downward clipping. Replaced fabricated ranking data with real
+  local totals and corrected displayed food reward on quit.
+- Added scripts/check_native.py: isolated real PICO-8 execution, 16 passing
+  regression assertions and exact protected-function comparison.
+- Captured native screenshots with real text and verified the main captures'
+  dimensions, palette count and integer pixel grid. Tracked six review images.
+- Exported the HTML build successfully. Full visual parity is not claimed;
+  details and remaining limitations are in [[13_NATIVE_VISUAL_PASS]].
