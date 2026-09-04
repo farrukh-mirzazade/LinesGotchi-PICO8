@@ -1,7 +1,9 @@
 # PICO-8 / local exports
 builds/
+build/
 exports/
 *.p8.png
+*.codex_bak
 
 # OS/editor noise
 .DS_Store
@@ -13,4 +15,3 @@ Thumbs.db
 *.log
 tmp/
 temp/
-

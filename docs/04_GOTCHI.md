@@ -29,3 +29,13 @@ The pet should eventually appear beside or near the Lines board and react emotio
 
 For MVP, this can be simplified to a small expression/status indicator.
 
+## Implemented Care Rules
+
+- On the Pet screen, `O` activates the selected navigation item.
+- On the Pet screen, `X` feeds the pet.
+- Home is navigation only and never changes pet stats.
+- Feeding consumes one tomato, lowers hunger, and raises weight.
+- Feeding does not increase happiness.
+- Feeding is blocked while the pet is eating or already full.
+- Toilet and sleep rewards cannot be repeated without a new care need.
+- Quitting Lines does not grant records, end-of-game rewards, EXP, or age.

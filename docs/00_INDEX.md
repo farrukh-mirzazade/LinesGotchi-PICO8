@@ -12,8 +12,13 @@ This folder is the Obsidian vault for LinesGotchi only.
 - [[06_PICO8_LIMITS]]
 - [[07_DEV_WORKFLOW]]
 - [[08_OPEN_QUESTIONS]]
+- [[09_VISUAL_DIRECTION]]
+- [[10_DEVELOPMENT_LOG]]
+- [[11_FUNCTIONAL_AUDIT]]
 
 ## Current Status
 
-Environment is prepared. Gameplay implementation has not started.
-
+The playable MVP is implemented and the functional audit passes 40 checks in
+the local PICO-8 runtime. Gameplay stabilization is complete for the current
+scope. Visual changes are paused pending a separate review against the locked
+reference.

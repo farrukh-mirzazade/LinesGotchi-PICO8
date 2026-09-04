@@ -16,12 +16,13 @@
 - Death is postponed after first playable build.
 - Evolution is postponed after first playable build.
 - Pet appears during Lines as a compact expression/status indicator.
-- Should weight affect health immediately?
+- Weight affects health gradually. The healthy range is `6..16`; values outside
+  it lower sustainable health over care ticks.
 
 ## Records
 
 - MVP saves high score, games played, total lines, and best line.
-- Include Hall of Gotchi in first playable build or later?
+- Hall of Gotchi remains a later feature.
 
 ## Visual Style
 

@@ -2,7 +2,9 @@
 
 PICO-8 project workspace for LinesGotchi: a compact hybrid of Color Lines and a virtual pet.
 
-This repository is currently prepared for development only. Gameplay code has not been implemented yet.
+The repository contains a playable local MVP with the pet-care loop, an 8x8
+Color Lines game, persistent records, settings, SFX, and a pixel-perfect PICO-8
+sprite sheet.
 
 ## Local Tools
 
@@ -16,13 +18,14 @@ This repository is currently prepared for development only. Gameplay code has no
 - `src/` - future split Lua/PICO-8 source files, if we decide to use includes or export tooling.
 - `docs/` - Obsidian vault and design documentation for this project only.
 - `assets/` - references, screenshots, and future art notes.
-- `builds/` - future exported builds.
+- `build/` - generated local HTML/JavaScript exports (gitignored).
+- `builds/` - reserved packaged builds.
 - `exports/` - future exported carts/images/html packages.
 - `scripts/` - local helper scripts for development.
 
 ## Current Target
 
-Prepare a first playable MVP:
+Stabilize and polish the playable MVP:
 
 - Pet screen.
 - `PLAY` action opens Lines.
@@ -31,5 +34,8 @@ Prepare a first playable MVP:
 - Feeding lowers hunger and raises weight.
 - Lines slightly lowers weight.
 - Local records are saved.
+- Three upcoming balls are previewed before a non-scoring move.
+- Care, settings, growth state, and records persist through `cartdata`.
+- Visual work follows `assets/design/locked_reference.png`.
 
 See `docs/00_INDEX.md` for the living specification.
