@@ -71,3 +71,19 @@ Commits already published:
   Its board geometry is not a valid 8x8 production asset.
 - Recorded production constraints and remaining implementation work in
   [[12_DESIGN_CORRECTION]]. No gameplay or cartridge changes in this design pass.
+
+## 2026-09-05 - Baby Reference And Geometry Correction
+
+- User clarified that the initial pet must have no arms or legs and rejected
+  references without verified PICO-8 feasibility.
+- Generated a limb-free character correction, rejected two seven-column board
+  edits, then saved the annotated eight-by-eight candidate as
+  `assets/design/reference_correction_sheet_v4.png`.
+- Checked all eight pet depictions and board cell count visually. Recorded
+  remaining nonsquare cell proportions, missing NEXT and unverified palette
+  and detail in [[12_DESIGN_CORRECTION]]. This is not a production-ready sheet.
+- Checked display/sprite/token constraints against the installed 0.2.7 manual;
+  documented integer-coordinate board/sidebar geometry and native acceptance
+  requirements. No claim of a native runtime visual test in this pass.
+- Corrected the obsolete reference instruction mentioning the Baby's feet.
+- Original locked reference, game logic, sprite data and web build unchanged.
