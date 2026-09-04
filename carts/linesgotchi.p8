@@ -209,25 +209,27 @@ function play_sound(id)
 end
 
 function update_pet()
+ if btnp(5) then return end
  if btnp(0) then menu_i=max(1,menu_i-1) play_sound(0) end
  if btnp(1) then menu_i=min(5,menu_i+1) play_sound(0) end
  if btnp(4) then
   open_menu()
  end
- if btnp(5) then feed_pet() end
 end
 
 function open_menu()
  if menu_i==1 then show_pet()
  elseif menu_i==2 then start_lines()
- elseif menu_i==3 then scr=s_stats
+ elseif menu_i==3 then scr=s_stats stats_i=0
  elseif menu_i==4 then scr=s_records
  elseif menu_i==5 then scr=s_settings
  end
 end
 
 function feed_pet()
- if pet.eating_t>0 then
+ if pet.sleeping_t>0 then
+  set_msg("let me sleep",30)
+ elseif pet.eating_t>0 then
   set_msg("still eating",20)
  elseif pet.hunger<=0 then
   set_msg("not hungry",30)
@@ -497,16 +499,17 @@ function update_settings()
 end
 
 function update_stats()
- if btnp(2) then stats_i=max(1,stats_i-1) play_sound(0) end
+ if btnp(5) then show_pet() return end
+ if btnp(2) then stats_i=max(0,stats_i-1) play_sound(0) end
  if btnp(3) then stats_i=min(2,stats_i+1) play_sound(0) end
  if btnp(0) then menu_i=max(1,menu_i-1) play_sound(0) end
  if btnp(1) then menu_i=min(5,menu_i+1) play_sound(0) end
  if btnp(4) then
   if menu_i~=3 then open_menu()
+  elseif stats_i==0 then feed_pet()
   elseif stats_i==1 then use_toilet()
   else put_pet_to_sleep() end
  end
- if btnp(5) then show_pet() end
 end
 
 function use_toilet()
@@ -523,7 +526,9 @@ function use_toilet()
 end
 
 function put_pet_to_sleep()
- if pet.sleeping_t>0 then
+ if pet.eating_t>0 then
+  set_msg("still eating",20)
+ elseif pet.sleeping_t>0 then
   set_msg("already asleep",30)
  elseif not pet.sleep_ready then
   set_msg("already rested",30)
@@ -852,6 +857,7 @@ function draw_stats_screen()
   right_number(vals[i],80,y+2,7)
  end
  inner_screen(89,15,122,42,1)
+ if stats_i==0 then rect(89,15,122,42,10) end
  spr(84,94,20)
  right_number(pet.tomatoes,117,31,7)
  panel(89,46,122,73,1,stats_i==1 and 10 or 6)

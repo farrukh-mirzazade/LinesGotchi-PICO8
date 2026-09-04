@@ -52,6 +52,49 @@ function _init()
  local h=pet.hunger
  for i=1,30 do key=4 update_pet() end
  check(pet.hunger==h,"home does not feed")
+ for screen in all({s_pet,s_lines,s_result,s_stats,s_records,s_settings}) do
+  start_lines()
+  scr=screen care_clock=0 menu_i=1
+  pet.hunger=60 pet.tomatoes=10 pet.eating_t=0
+  key=5
+  for i=1,120 do _update() end
+  check(pet.hunger==60 and pet.tomatoes==10 and pet.eating_t==0,
+        "repeated x never feeds from screen "..screen)
+ end
+ -- Care actions are available only through their focused Stats controls.
+ pet.hunger=60 pet.tomatoes=3 pet.eating_t=0 pet.sleeping_t=0
+ scr=s_pet menu_i=3 key=4
+ _update()
+ check(scr==s_stats and stats_i==0 and pet.hunger==60,
+       "opening care does not feed")
+ _update()
+ check(pet.hunger==40 and pet.tomatoes==2 and pet.eating_t>0,
+       "confirm tomato feeds once")
+ _update()
+ check(pet.hunger==40 and pet.tomatoes==2,"eating blocks repeat")
+ pet.eating_t=0 pet.tomatoes=0
+ _update()
+ check(pet.hunger==40,"no food blocks feeding")
+ pet.tomatoes=3 pet.hunger=0
+ _update()
+ check(pet.tomatoes==3,"full pet keeps food")
+ pet.hunger=60 pet.sleeping_t=100
+ _update()
+ check(pet.hunger==60 and pet.tomatoes==3,"sleep blocks feeding")
+ pet.sleeping_t=0
+ key=3 _update()
+ check(stats_i==1,"down selects toilet")
+ pet.toilet_ok=false key=4 _update()
+ check(pet.toilet_ok and pet.hunger==60,"toilet does not feed")
+ key=3 _update()
+ check(stats_i==2,"down selects sleep")
+ pet.sleep_ready=true pet.eating_t=10 key=4 _update()
+ check(pet.sleeping_t==0,"eating blocks sleep")
+ pet.eating_t=0 _update()
+ check(pet.sleeping_t>0 and pet.hunger==62,"sleep works without feeding")
+ pet.sleeping_t=0
+ key=2 _update() _update() _update()
+ check(stats_i==0,"up stops at feeding")
  key=-1
  start_lines()
  check(#next_balls==3,"next count")
@@ -160,7 +203,7 @@ result = subprocess.run(
 )
 print(result.stdout, result.stderr)
 assert result.returncode == 0, "PICO-8 exited with an error"
-assert "PASS: 16 native checks" in result.stdout, "Native checks did not finish"
+assert "PASS: 34 native checks" in result.stdout, "Native checks did not finish"
 assert "FAIL:" not in result.stdout, "Native assertion failed"
 for name in ("pet", "lines", "stats", "records", "settings", "quit", "result"):
     assert (OUT / (name + ".png")).exists(), "Missing screenshot: " + name

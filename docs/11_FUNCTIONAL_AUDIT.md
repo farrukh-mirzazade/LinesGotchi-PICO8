@@ -6,6 +6,23 @@ Runtime: locally installed PICO-8, headless execution through `-x`.
 
 Result: **40 passed, 0 failed**.
 
+This is a historical audit. The current reproducible suite is
+`python3 scripts/check_native.py`; its 2026-09-05 care-input revision passes
+34 assertions plus native pixel checks, not a repeat of all 40 older checks.
+
+## 2026-09-05 Care Input Regression
+
+- Reproduced the reported defect before fixing it: X returns from secondary
+  screens to Home, where repeated X used to call feed_pet.
+- Repeated X 120 times starting from each of all six screens: hunger,
+  tomato inventory and eating state remain unchanged after the fix.
+- Food is now selected through the existing tomato panel in Stats/care.
+  Opening that screen alone does not feed; O on the tomato does.
+- Verified food consumption, cooldown, full-pet and empty-inventory guards,
+  sleep/feeding mutual exclusion, and Up/Down access to all three care actions.
+- Art and layout are unchanged except the food panel's focus outline.
+- Protected pathfinding and line detection still match the baseline.
+
 ## Verified Areas
 
 ### Pet And Care

@@ -111,3 +111,18 @@ Commits already published:
 - Re-ran 16 passing native regression checks and added pixel-for-pixel
   queue/board comparisons covering all five colours.
 - Saved actual PICO-8 review captures under assets/review/lines-polish/.
+
+## 2026-09-05 - Remove Accidental X Feeding
+
+- User reported feeding through repeated X from every screen and requested
+  small functional fixes without further visual redesign.
+- Added a failing native regression, reproduced the Home X feed binding,
+  and removed it. X is now back/cancel outside Home and inert on Home.
+- Feeding moved into the existing tomato control in Stats/care, above toilet
+  and sleep. Up/Down chooses, O acts. Only a focus outline was added.
+- Blocked feeding during sleep and starting sleep during eating.
+- Current suite: 34 native assertions passed, including repeated X from all
+  six screens and all three care controls. Existing five-colour queue pixel
+  checks also pass. No sprite or protected algorithm changes.
+- More pet-care depth is requested; no new needs or progression rules were
+  silently added in this focused fix.

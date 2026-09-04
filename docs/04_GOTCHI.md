@@ -32,10 +32,13 @@ For MVP, this can be simplified to a small expression/status indicator.
 ## Implemented Care Rules
 
 - On the Pet screen, `O` activates the selected navigation item.
-- On the Pet screen, `X` feeds the pet.
+- On the Pet screen, `X` has no care effect.
+- In Stats/care, Up/Down selects tomato (food), toilet, or sleep. `O`
+  confirms the selected care action; `X` returns home without applying care.
 - Home is navigation only and never changes pet stats.
 - Feeding consumes one tomato, lowers hunger, and raises weight.
 - Feeding does not increase happiness.
-- Feeding is blocked while the pet is eating or already full.
+- Feeding is blocked while eating, sleeping, already full, or out of tomatoes.
+- Sleep cannot start while eating.
 - Toilet and sleep rewards cannot be repeated without a new care need.
 - Quitting Lines does not grant records, end-of-game rewards, EXP, or age.
