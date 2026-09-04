@@ -126,3 +126,17 @@ Commits already published:
   checks also pass. No sprite or protected algorithm changes.
 - More pet-care depth is requested; no new needs or progression rules were
   silently added in this focused fix.
+
+## 2026-09-05 - Energy And Gradual Sleep Recovery
+
+- User approved the next small functional step: energy and meaningful sleep.
+- Added bounded energy, awake-time and successful-move costs, and gradual
+  recovery. Removed instant health/happiness awards from starting sleep.
+- Preserved existing games at zero energy; block only new sessions until rest.
+  Repeated sleep activation cannot restart or accelerate the timer.
+- Added save slots 21-23 with old-save defaults and phase-preserving reload.
+  No offline simulation is claimed.
+- Reused the existing sleep status text for energy percent; no artwork or
+  screen geometry changes. Detailed initial balance is in [[04_GOTCHI]].
+- Native suite passes 51 assertions plus five-colour pixel comparisons;
+  can_reach and clear_lines remain byte-identical to their baseline.

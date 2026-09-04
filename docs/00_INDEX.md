@@ -21,7 +21,7 @@ This folder is the Obsidian vault for LinesGotchi only.
 ## Current Status
 
 The native visual adaptation is implemented and awaiting visual acceptance.
-The current reproducible suite passes 34 focused native regression checks.
+The current reproducible suite passes 51 focused native regression checks.
 Actual PICO-8 screenshots and fidelity limits are recorded in
 [[13_NATIVE_VISUAL_PASS]]. Earlier audit counts are historical, not evidence
 of exhaustive verification of this revision.

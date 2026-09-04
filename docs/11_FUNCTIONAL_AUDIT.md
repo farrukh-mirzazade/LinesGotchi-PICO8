@@ -10,6 +10,11 @@ This is a historical audit. The current reproducible suite is
 `python3 scripts/check_native.py`; its 2026-09-05 care-input revision passes
 34 assertions plus native pixel checks, not a repeat of all 40 older checks.
 
+The subsequent energy/sleep revision passes 51 assertions. Added coverage:
+idle and move energy drain, lower bound, new-session guards, no instant sleep
+reward, timed recovery, repeated sleep, mid-second save/reload, full recovery,
+odd deficits, old-save migration and corrupted-save bounds.
+
 ## 2026-09-05 Care Input Regression
 
 - Reproduced the reported defect before fixing it: X returns from secondary

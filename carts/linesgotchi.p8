@@ -41,6 +41,7 @@ pet={
  hunger=15,
  happy=55,
  health=100,
+ energy=80,
  discipline=45,
  weight=10,
  age=0,
@@ -98,12 +99,12 @@ function _update()
   care_clock=0
   pet.hunger=clamp(pet.hunger+1,0,100)
   if pet.hunger>70 then pet.happy=clamp(pet.happy-1,0,100) end
-  if pet.sleeping_t==0 then pet.sleep_ready=true end
+  if pet.sleeping_t==0 then pet.energy=max(0,pet.energy-1) end
   update_weight_health()
   save_state()
  end
  if pet.eating_t>0 then pet.eating_t-=1 end
- if pet.sleeping_t>0 then pet.sleeping_t-=1 end
+ update_sleep()
  if msg_timer>0 then
   msg_timer-=1
   if msg_timer==0 then msg="" end
@@ -164,6 +165,17 @@ function load_save()
    end
   end
   pet.exp=clamp(pet.exp,0,pet.max_exp-1)
+  if dget(23)==1 then
+   pet.energy=clamp(flr(dget(21)),0,100)
+   local duration=flr((101-pet.energy)/2)*30
+   pet.sleeping_t=0
+   if dget(22)>0 and duration>0 then
+    pet.sleeping_t=clamp(flr(dget(22)),max(1,duration-29),duration)
+   end
+  else
+   pet.energy=80
+   pet.sleeping_t=0
+  end
  end
 end
 
@@ -189,6 +201,9 @@ function save_state()
  dset(18,pet.toilet_ok and 1 or 0)
  dset(19,pet.sleep_ready and 1 or 0)
  dset(20,1)
+ dset(21,pet.energy)
+ dset(22,pet.sleeping_t)
+ dset(23,1)
 end
 
 function clamp(v,lo,hi)
@@ -250,6 +265,8 @@ function feed_pet()
 end
 
 function start_lines()
+ if pet.sleeping_t>0 then set_msg("let me sleep",40) return end
+ if pet.energy<=0 then set_msg("need sleep",40) return end
  scr=s_lines
  menu_i=2
  cx=1
@@ -362,6 +379,7 @@ function lines_action()
 end
 
 function tick_pet_play()
+ pet.energy=max(0,pet.energy-1)
  if moves%3==0 then
   pet.happy=clamp(pet.happy+1,0,100)
   pet.hunger=clamp(pet.hunger+1,0,100)
@@ -370,6 +388,7 @@ function tick_pet_play()
   pet.weight-=1
  end
  update_weight_health()
+ save_state()
 end
 
 function capture_board()
@@ -530,18 +549,30 @@ function put_pet_to_sleep()
   set_msg("still eating",20)
  elseif pet.sleeping_t>0 then
   set_msg("already asleep",30)
- elseif not pet.sleep_ready then
+ elseif pet.energy>=100 then
   set_msg("already rested",30)
  else
-  pet.sleeping_t=180
+  pet.sleeping_t=flr((101-pet.energy)/2)*30
   pet.sleep_ready=false
-  pet.health=clamp(pet.health+8,0,100)
-  pet.happy=clamp(pet.happy+2,0,100)
-  pet.hunger=clamp(pet.hunger+2,0,100)
   set_msg("sweet dreams",45)
   save_state()
   play_sound(1)
  end
+end
+
+function update_sleep()
+ if pet.sleeping_t<=0 then return end
+ pet.sleeping_t-=1
+ -- One recovery tick each second. Save the remaining phase, not wall time.
+ if pet.sleeping_t%30==0 then
+  pet.energy=min(100,pet.energy+2)
+  if pet.energy>=100 then pet.sleeping_t=0 end
+  if pet.sleeping_t==0 then
+   pet.sleep_ready=false
+   set_msg("fully rested",45)
+  end
+ end
+ save_state()
 end
 
 function update_weight_health()
@@ -865,7 +896,7 @@ function draw_stats_screen()
  print(pet.toilet_ok and "clean" or "use",96,63,12)
  panel(89,77,122,103,1,stats_i==2 and 10 or 6)
  spr(86,101,82)
- print(pet.sleeping_t>0 and "zzz" or "sleep",96,95,10)
+ print((pet.sleeping_t>0 and "+" or "")..pet.energy.."%",96,95,10)
  notice()
  draw_nav(menu_i)
 end

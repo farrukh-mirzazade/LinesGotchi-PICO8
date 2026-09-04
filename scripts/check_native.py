@@ -91,10 +91,59 @@ function _init()
  pet.sleep_ready=true pet.eating_t=10 key=4 _update()
  check(pet.sleeping_t==0,"eating blocks sleep")
  pet.eating_t=0 _update()
- check(pet.sleeping_t>0 and pet.hunger==62,"sleep works without feeding")
+ check(pet.sleeping_t>0 and pet.hunger==60,"sleep works without feeding")
  pet.sleeping_t=0
  key=2 _update() _update() _update()
  check(stats_i==0,"up stops at feeding")
+ key=-1 pet.eating_t=0 pet.sleeping_t=0
+ pet.energy=80 care_clock=899 scr=s_pet
+ _update()
+ check(pet.energy==79,"awake time consumes energy")
+ moves=1 tick_pet_play()
+ check(pet.energy==78,"successful move consumes energy")
+ pet.energy=0 tick_pet_play()
+ check(pet.energy==0,"energy never negative")
+ scr=s_pet start_lines()
+ check(scr==s_pet,"empty energy blocks new session")
+ pet.energy=80 pet.health=60 pet.happy=50
+ put_pet_to_sleep()
+ check(pet.sleeping_t==300 and pet.energy==80 and pet.health==60
+       and pet.happy==50,"sleep starts without instant reward")
+ start_lines()
+ check(scr==s_pet,"sleep blocks new session")
+ for i=1,29 do update_sleep() end
+ check(pet.energy==80,"recovery waits one second")
+ update_sleep()
+ check(pet.energy==82 and pet.sleeping_t==270,"sleep recovers gradually")
+ put_pet_to_sleep()
+ check(pet.sleeping_t==270 and pet.energy==82,"repeat sleep cannot speed recovery")
+ for i=1,7 do update_sleep() end
+ save_state()
+ pet.energy=1 pet.sleeping_t=0
+ load_save()
+ check(pet.energy==82 and pet.sleeping_t==263,"sleep phase survives reload")
+ for i=1,263 do update_sleep() end
+ check(pet.energy==100 and pet.sleeping_t==0,"sleep completes at full energy")
+ put_pet_to_sleep()
+ check(pet.sleeping_t==0,"rested pet cannot farm sleep")
+ pet.energy=99 put_pet_to_sleep()
+ for i=1,30 do update_sleep() end
+ check(pet.energy==100 and pet.sleeping_t==0,"odd deficit clamps correctly")
+ storage[23]=nil
+ pet.energy=0 pet.sleeping_t=99
+ load_save()
+ check(pet.energy==80 and pet.sleeping_t==0,"legacy save gets safe defaults")
+ storage[23]=1 storage[21]=-9 storage[22]=9999
+ load_save()
+ check(pet.energy==0 and pet.sleeping_t==1500,"damaged save is clamped")
+ storage[22]=1
+ load_save()
+ check(pet.sleeping_t==1471,"short corrupted sleep cannot wake unrested")
+ storage[21]=200
+ load_save()
+ check(pet.energy==100 and pet.sleeping_t==0,"full energy cancels stale sleep")
+ pet.energy=80 pet.sleeping_t=0
+ save_state()
  key=-1
  start_lines()
  check(#next_balls==3,"next count")
@@ -203,7 +252,7 @@ result = subprocess.run(
 )
 print(result.stdout, result.stderr)
 assert result.returncode == 0, "PICO-8 exited with an error"
-assert "PASS: 34 native checks" in result.stdout, "Native checks did not finish"
+assert "PASS: 51 native checks" in result.stdout, "Native checks did not finish"
 assert "FAIL:" not in result.stdout, "Native assertion failed"
 for name in ("pet", "lines", "stats", "records", "settings", "quit", "result"):
     assert (OUT / (name + ".png")).exists(), "Missing screenshot: " + name
