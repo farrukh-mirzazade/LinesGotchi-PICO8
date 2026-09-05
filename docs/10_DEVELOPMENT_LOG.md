@@ -118,6 +118,17 @@ Commits already published:
   small functional fixes without further visual redesign.
 - Added a failing native regression, reproduced the Home X feed binding,
   and removed it. X is now back/cancel outside Home and inert on Home.
+
+## 2026-09-05 - Text Readability Pass
+
+- Added `ui_print()` helper for consistent text rendering with shadow to improve
+  readability across all gameplay screens.
+- Updated all explicit `print()` calls to use `ui_print`, including notice text,
+  stat labels, settings/records/result lines, and action prompts.
+- Adjusted a few fragile labels to avoid low-contrast combinations on light
+  and cyan-accented backgrounds.
+- No logic or gameplay functions changed in this pass; this is a pure UI
+  readability pass.
 - Feeding moved into the existing tomato control in Stats/care, above toilet
   and sleep. Up/Down chooses, O acts. Only a focus outline was added.
 - Blocked feeding during sleep and starting sleep during eating.

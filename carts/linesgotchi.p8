@@ -746,14 +746,19 @@ end
 
 function right_number(v,x,y,c)
  local txt=number_text(v)
- print(txt,x-#txt*4+1,y,c)
+ ui_print(txt,x-#txt*4+1,y,c)
+end
+
+function ui_print(txt,x,y,c)
+ print(txt,x+1,y+1,0)
+ print(txt,x,y,c)
 end
 
 function notice()
  if msg=="" then return end
  rectfill(9,90,118,101,1)
  rect(9,90,118,101,6)
- print(msg,64-#msg*2,94,10)
+ ui_print(msg,64-#msg*2,94,10)
 end
 
 function draw_pet_screen()
@@ -824,7 +829,7 @@ function draw_lines_screen()
        ox+(sx-1)*cs+8,oy+(sy-1)*cs+8,10)
  end
  spr(67,90,20)
- right_number(score,118,22,7)
+ right_number(score,118,22,1)
  line(89,31,118,31,5)
  spr(80,89,35)
  draw_bar(100,36,17,4,full(),11)
@@ -832,7 +837,7 @@ function draw_lines_screen()
  draw_bar(100,47,17,4,pet.happy,10)
  inner_screen(89,54,118,82,7)
  draw_pet_sprite(92,56,sel>0 and 4 or current_pet_state())
- print("next",96,85,6)
+ ui_print("next",96,85,7)
  -- One shared tray, equal 2px gaps and margins; no contact with the bezel.
  rectfill(88,92,119,101,15)
  rectfill(89,93,118,100,7)
@@ -842,16 +847,16 @@ function draw_lines_screen()
  if hints_on then
   panel(6,106,81,121,1,6)
   spr(69,10,110)
-  print("move",21,112,6)
+  ui_print("move",21,112,7)
   spr(70,42,110)
-  print("o pick",53,112,7)
+  ui_print("o pick",53,112,7)
   panel(85,106,121,121,1,6)
-  print("x exit",91,112,7)
+  ui_print("x exit",91,112,7)
  end
  if quit_confirm then
   inner_screen(10,43,117,73,1)
-  print("quit game?",44,50,7)
-  print("o yes    x no",38,62,10)
+  ui_print("quit game?",44,50,7)
+  ui_print("o yes    x no",38,62,10)
  else
   notice()
  end
@@ -874,17 +879,17 @@ function draw_stats_screen()
  inner_screen(5,15,86,103,1)
  inner_screen(8,18,37,46,7)
  draw_pet_sprite(11,20,current_pet_state())
- print("lv "..pet.level,42,21,7)
+ ui_print("lv "..pet.level,42,21,7)
  draw_bar(42,30,38,4,pet.exp/pet.max_exp*100,14)
- print(number_text(pet.exp).."/"..number_text(pet.max_exp),42,38,6)
- print(pet_stage(),42,46,14)
+ ui_print(number_text(pet.exp).."/"..number_text(pet.max_exp),42,38,10)
+ ui_print(pet_stage(),42,46,14)
  local vals={full(),pet.happy,total_lines,games_played}
  local labels={"full","mood","lines","games"}
  local cols={11,10,14,12}
  for i=1,4 do
   local y=53+(i-1)*12
   spr(79+i,10,y)
-  print(labels[i],22,y+2,cols[i])
+  ui_print(labels[i],22,y+2,cols[i])
   right_number(vals[i],80,y+2,7)
  end
  inner_screen(89,15,122,42,1)
@@ -893,10 +898,11 @@ function draw_stats_screen()
  right_number(pet.tomatoes,117,31,7)
  panel(89,46,122,73,1,stats_i==1 and 10 or 6)
  spr(85,102,50)
- print(pet.toilet_ok and "clean" or "use",96,63,12)
+ local toilet_col = stats_i==1 and 1 or 12
+ ui_print(pet.toilet_ok and "clean" or "use",96,63,toilet_col)
  panel(89,77,122,103,1,stats_i==2 and 10 or 6)
  spr(86,101,82)
- print((pet.sleeping_t>0 and "+" or "")..pet.energy.."%",96,95,10)
+ ui_print((pet.sleeping_t>0 and "+" or "")..pet.energy.."%",96,95,10)
  notice()
  draw_nav(menu_i)
 end
@@ -907,14 +913,14 @@ function draw_records_screen()
  -- Decorative category strip; only local saved records are displayed.
  panel(8,18,43,29,8,6)
  spr(67,22,20)
- print("local records",51,22,7)
+ ui_print("local records",51,22,7)
  local labels={"best","games","lines","longest"}
  local values={hi_score,games_played,total_lines,best_line}
  local icons={67,65,82,83}
  for i=1,4 do
   local y=35+(i-1)*14
   spr(icons[i],11,y)
-  print(labels[i],25,y+2,7)
+  ui_print(labels[i],25,y+2,7)
   right_number(values[i],115,y+2,i==1 and 10 or 7)
   line(10,y+11,117,y+11,5)
  end
@@ -924,37 +930,37 @@ end
 function draw_settings_screen()
  device_bezel(13)
  inner_screen(5,15,122,103,1)
- print("settings",12,22,7)
+ ui_print("settings",12,22,7)
  line(9,31,118,31,5)
  for i=1,2 do
   local y=39+(i-1)*23
   local on=i==1 and sound_on or i==2 and hints_on
   if settings_i==i then rect(9,y-4,118,y+13,10) end
   spr(i==1 and 68 or 69,13,y)
-  print(i==1 and "sound" or "hints",27,y+2,7)
+  ui_print(i==1 and "sound" or "hints",27,y+2,7)
   rectfill(95,y,112,y+7,on and 3 or 5)
   rectfill(on and 105 or 96,y+1,on and 111 or 102,y+6,7)
  end
  spr(84,13,88)
- print("saved locally",27,90,6)
+ ui_print("saved locally",27,90,7)
  draw_nav(menu_i)
 end
 
 function draw_result_screen()
  device_bezel(8)
  inner_screen(8,18,119,104,1)
- print(new_best and "new record!" or result_reason,40,26,10)
+ ui_print(new_best and "new record!" or result_reason,40,26,10)
  local labels={"score","lines","best","food"}
  local values={score,session_lines,session_best,
                result_reason=="quit" and 0 or flr(session_lines/4)}
  for i=1,4 do
   local y=40+(i-1)*13
   spr(66+i%2,17,y)
-  print(labels[i],33,y+2,6)
+  ui_print(labels[i],33,y+2,7)
   right_number(values[i],109,y+2,7)
  end
  line(12,95,115,95,5)
- print("o continue",44,110,7)
+ ui_print("o continue",44,110,7)
 end
 
 function draw_nav(active)
