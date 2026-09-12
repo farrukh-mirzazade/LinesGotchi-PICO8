@@ -14,7 +14,7 @@
 
 ## Implemented Loop
 
-1. The LCD shows the pet and seven care icons.
+1. The LCD shows the pet and ten icons in two rows of five.
 2. The player responds to hunger, low happiness, sleep, mess, illness, and
    false attention calls.
 3. Food, light, medicine, toilet and discipline resolve different needs.

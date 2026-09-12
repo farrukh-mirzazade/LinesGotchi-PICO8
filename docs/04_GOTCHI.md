@@ -31,7 +31,7 @@ For MVP, this can be simplified to a small expression/status indicator.
 
 ## Implemented Care Rules
 
-- Left/Right cycles the seven original-style care icons. `O` opens or confirms
+- Left/Right cycles the nine selectable care icons. `O` opens or confirms
   an action; `X` cancels a submenu and never applies care by itself.
 - Meal lowers hunger by 25 and adds one weight. Snack raises happiness by 15
   and adds two weight. Feeding is blocked while eating or sleeping.

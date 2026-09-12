@@ -221,3 +221,21 @@ Commits already published:
 - Attention remains visible in a muted LCD colour while idle and blinks dark
   when care is required. It remains an indicator rather than an eighth action.
 - Added native screenshot assertions for all eight icon cells and row alignment.
+
+## 2026-09-13 - Full-Screen Pet LCD
+
+- User supplied an original interface reference and explicitly removed the
+  decorative Tamagotchi-like shell from the game view.
+- The complete 128x128 PICO-8 viewport is now the LCD. Removed the shell,
+  LinesGotchi heading and three decorative hardware buttons.
+- Preserved the approved eight-icon rule despite the supplied reference showing
+  five icons per row: four icons now sit at x=12, 44, 76 and 108 on y=6 and
+  y=114, leaving the full centre area for the pet and care states.
+- Replaced the oversized selection corners with a small inward-facing underline
+  so selecting an action does not change the apparent icon size.
+- User then approved matching the reference's five-icons-per-row geometry.
+  The LCD now has ten permanent positions at x=8, 34, 60, 86 and 112.
+  Records and Sound fill the two added actionable positions; Attention remains
+  the tenth, non-selectable indicator.
+- Native suite now includes direct Records and Sound icon checks: 52 checks in
+  total, plus the ten-cell screenshot assertion and Lines queue comparison.

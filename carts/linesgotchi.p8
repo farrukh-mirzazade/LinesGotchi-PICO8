@@ -343,8 +343,8 @@ function update_pet()
    save_state()
    return
   end
-  if btnp(0) then menu_i=(menu_i+5)%7+1 play_sound(0) end
-  if btnp(1) then menu_i=menu_i%7+1 play_sound(0) end
+  if btnp(0) then menu_i=(menu_i+7)%9+1 play_sound(0) end
+  if btnp(1) then menu_i=menu_i%9+1 play_sound(0) end
   if btnp(4) then open_menu() end
  else
   if btnp(5) then care_mode=0 play_sound(1) return end
@@ -371,6 +371,11 @@ function open_menu()
  elseif menu_i==5 then use_toilet()
  elseif menu_i==6 then care_mode=3 status_page=1
  elseif menu_i==7 then discipline_pet()
+ elseif menu_i==8 then care_mode=3 status_page=4
+ elseif menu_i==9 then
+  sound_on=not sound_on
+  set_msg(sound_on and "sound on" or "sound off",40)
+  save_state()
  end
 end
 
@@ -459,7 +464,7 @@ function start_lines()
  if pet.sleeping_t>0 then set_msg("let me sleep",40) return end
  if pet.energy<=0 then set_msg("need sleep",40) return end
  scr=s_lines
- menu_i=2
+ menu_i=3
  cx=1
  cy=1
  sel=0
@@ -890,10 +895,8 @@ function mono_icon(sid,x,y,selected,ink)
  spr(sid,x,y)
  pal()
  if selected then
-  line(x-1,y-1,x+2,y-1,1) line(x-1,y-1,x-1,y+2,1)
-  line(x+5,y-1,x+8,y-1,1) line(x+8,y-1,x+8,y+2,1)
-  line(x-1,y+8,x+2,y+8,1) line(x-1,y+5,x-1,y+8,1)
-  line(x+5,y+8,x+8,y+8,1) line(x+8,y+5,x+8,y+8,1)
+  local sy=y<64 and y+9 or y-2
+  line(x,sy,x+7,sy,1)
  end
 end
 
@@ -947,7 +950,7 @@ function hearts(value,y)
 end
 
 function draw_care_view()
- rectfill(22,32,105,87,6)
+ rectfill(2,18,125,110,6)
  if care_mode==1 then
   print("food",56,35,1)
   print((care_choice==1 and ">" or " ").."meal",38,50,1)
@@ -984,60 +987,41 @@ function draw_status_page()
  end
 end
 
-function draw_egg_shell()
- for y=0,127 do
-  local half
-  if y<16 then
-   half=24+flr(y*1.9)
-  elseif y<80 then
-   half=58
-  else
-   half=58-flr((y-80)*0.55)
-  end
-  local x0=64-half
-  local x1=64+half
-  line(x0,y,x1,y,(y==0 or y==127) and 1 or 15)
-  if y>0 and y<127 then pset(x0,y,1) pset(x1,y,1) end
- end
-end
-
 function draw_pet_screen()
  pal()
- cls(7)
- -- Egg-shaped shell and three physical-button marks evoke the 1997 toy.
- draw_egg_shell()
- print("linesgotchi",44,6,1)
- rectfill(15,15,112,104,5)
- rect(14,14,113,105,1)
- rectfill(18,18,109,101,6)
- -- Identical four-column grid for both icon rows.
- local xs={24,48,72,96}
- local top={84,86,65,83}
- local bottom={85,80,82,87}
- for i=1,4 do mono_icon(top[i],xs[i],21,care_mode==0 and menu_i==i) end
- for i=1,4 do
-  local selected=care_mode==0 and menu_i==i+4 and i<4
+ -- Full-screen LCD: the PICO-8 viewport is the pet device screen.
+ cls(1)
+ rectfill(2,0,125,127,6)
+ rectfill(0,2,127,125,6)
+ line(2,0,125,0,1) line(2,127,125,127,1)
+ line(0,2,0,125,1) line(127,2,127,125,1)
+ local xs={8,34,60,86,112}
+ local top={84,86,65,83,85}
+ local bottom={66,82,67,68,87}
+ for i=1,5 do mono_icon(top[i],xs[i],6,care_mode==0 and menu_i==i) end
+ for i=1,5 do
+  local selected=care_mode==0 and menu_i==i+5 and i<5
   local ink=1
-  if i==4 then
+  if i==5 then
    ink=attention_needed() and flr(time()*4)%2==0 and 1 or 5
   end
-  mono_icon(bottom[i],xs[i],90,selected,ink)
+  mono_icon(bottom[i],xs[i],114,selected,ink)
  end
  if care_mode>0 then
   draw_care_view()
  elseif pet.egg_t>0 then
-  rectfill(22,32,105,87,6)
+  rectfill(2,18,125,110,6)
   draw_egg()
  elseif pet.dead then
-  rectfill(22,32,105,87,6)
+  rectfill(2,18,125,110,6)
   print("goodbye",50,47,1)
   print("o:new egg",46,66,1)
  elseif not pet.lights_on then
-  rectfill(22,32,105,87,1)
+  rectfill(2,18,125,110,1)
   if pet.sleeping_t>0 then print("z z z",54,57,11) end
  else
-  local names={"food","light","game","med","toilet","status","discipline"}
-  print(names[menu_i],64-#names[menu_i]*2,34,1)
+  local names={"food","light","game","med","toilet","status","discipline","records","sound"}
+  print(names[menu_i],64-#names[menu_i]*2,22,1)
   draw_lcd_pet(52,48+flr(time()*2)%2)
   for i=1,pet.poop do
    local px=27+(i-1)*9
@@ -1046,11 +1030,10 @@ function draw_pet_screen()
   if pet.sick then print("+",93,51,1) end
   if pet.false_call then print("!",94,68,1) end
   if msg~="" then
-   rectfill(24,77,103,86,6)
-   print(msg,64-#msg*2,79,1)
+   rectfill(12,94,115,103,6)
+   print(msg,64-#msg*2,96,1)
   end
  end
- for x=45,83,19 do circfill(x,116,4,5) circ(x,116,4,1) end
 end
 
 function draw_lines_screen()

@@ -27,5 +27,6 @@
 
 ## Visual Style
 
-- Care screen uses an egg-shaped 1997-style shell, monochrome LCD, seven care
-  icons and blinking Attention. Lines remains colourful for game readability.
+- Care screen uses a full-screen monochrome LCD with five icons above and five
+  below the pet. Attention is always present and blinks when care is required.
+  Lines remains colourful for game readability.

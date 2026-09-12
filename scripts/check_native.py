@@ -59,7 +59,7 @@ function _init()
  check(not sound_on and menu_i==1,"x plus left toggles sound")
  held=-1
  key=0 update_pet()
- check(menu_i==7,"left wraps care icons")
+ check(menu_i==9,"left wraps care icons")
  key=1 update_pet()
  check(menu_i==1,"right wraps care icons")
  key=4 update_pet()
@@ -107,6 +107,11 @@ function _init()
  check(status_page==2,"status pages cycle")
  key=5 update_pet()
  check(care_mode==0,"status closes with x")
+ menu_i=8 key=4 update_pet()
+ check(care_mode==3 and status_page==4,"records opens record status")
+ key=5 update_pet()
+ menu_i=9 sound_on=false key=4 update_pet()
+ check(sound_on,"sound icon toggles sound")
  key=-1 pet.eating_t=0 pet.sleeping_t=0 pet.lights_on=true
  pet.poop=0 pet.sick=false pet.false_call=false pet.hunger=20 pet.happy=60
  pet.energy=80 pet.care_ticks=5
@@ -256,14 +261,15 @@ result = subprocess.run(
 )
 print(result.stdout, result.stderr)
 assert result.returncode == 0, "PICO-8 exited with an error"
-assert "PASS: 50 native checks" in result.stdout, "Native checks did not finish"
+assert "PASS: 52 native checks" in result.stdout, "Native checks did not finish"
 assert "FAIL:" not in result.stdout, "Native assertion failed"
 for name in ("pet", "pet_food", "pet_light", "pet_status", "pet_attention",
              "lines", "quit", "result"):
     assert (OUT / (name + ".png")).exists(), "Missing screenshot: " + name
     image = Image.open(OUT / (name + ".png")).convert("RGB")
     assert image.size == (512, 512), name + " dimensions"
-    assert 3 < len(image.getcolors(512 * 512)) <= 16, name + " palette"
+    min_colours = 2 if name.startswith("pet") else 4
+    assert min_colours <= len(image.getcolors(512 * 512)) <= 16, name + " palette"
     pixels = image.load()
     for y in range(0, 512, 4):
         for x in range(0, 512, 4):
@@ -271,18 +277,18 @@ for name in ("pet", "pet_food", "pet_light", "pet_status", "pet_attention",
                        for dx in range(4) for dy in range(4)), name + " pixel grid"
 print("Native screenshots:", OUT)
 
-# Both LCD icon rows must contain four visible icons in the same columns.
+# Both LCD icon rows must contain five visible icons in the same columns.
 image = Image.open(OUT / "pet.png").convert("RGB")
 pixels = image.load()
 lcd_bg = pixels[20 * 4, 20 * 4]
-for y in (21, 90):
-    for x in (24, 48, 72, 96):
+for y in (6, 114):
+    for x in (8, 34, 60, 86, 112):
         visible = sum(
             pixels[(x + dx) * 4, (y + dy) * 4] != lcd_bg
             for dy in range(8) for dx in range(8)
         )
         assert visible >= 4, ("missing lcd icon", x, y, visible)
-print("PASS: eight LCD icons use aligned 4x2 grid")
+print("PASS: ten LCD icons use aligned 5x2 grid")
 
 # The queue must use the same unscaled sprite and background as the board.
 for name, colours in (("five_colours_a", (1, 2, 3)),

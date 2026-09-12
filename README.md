@@ -35,8 +35,8 @@ pixel-perfect PICO-8 sprite sheet.
 
 Stabilize and polish the playable hybrid:
 
-- Egg-shaped monochrome pet screen with Food, Light, Game, Medicine, Toilet,
-  Status, Discipline and Attention.
+- Full-screen monochrome pet LCD with Food, Light, Game, Medicine, Toilet,
+  Status, Discipline, Records, Sound and Attention in a 5x2 icon layout.
 - The Game icon opens Lines.
 - Lines raises happiness.
 - Lines increases hunger over time/activity.
