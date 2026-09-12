@@ -211,3 +211,13 @@ Commits already published:
 - Removed unreachable legacy Stats, Records and Settings screen code after the
   single-LCD menu replaced it. Records remain available on Status page 4 and
   sound remains available through the original-style shortcut.
+
+## 2026-09-13 - Strict Eight-Icon LCD Grid
+
+- Corrected the care menu to show exactly eight icons at all times: four above
+  and four below the pet area.
+- Both rows now share columns x=24, 48, 72 and 96. The previous 22-pixel step
+  biased both rows to the left.
+- Attention remains visible in a muted LCD colour while idle and blinks dark
+  when care is required. It remains an indicator rather than an eighth action.
+- Added native screenshot assertions for all eight icon cells and row alignment.

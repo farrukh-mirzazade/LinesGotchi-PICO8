@@ -271,6 +271,19 @@ for name in ("pet", "pet_food", "pet_light", "pet_status", "pet_attention",
                        for dx in range(4) for dy in range(4)), name + " pixel grid"
 print("Native screenshots:", OUT)
 
+# Both LCD icon rows must contain four visible icons in the same columns.
+image = Image.open(OUT / "pet.png").convert("RGB")
+pixels = image.load()
+lcd_bg = pixels[20 * 4, 20 * 4]
+for y in (21, 90):
+    for x in (24, 48, 72, 96):
+        visible = sum(
+            pixels[(x + dx) * 4, (y + dy) * 4] != lcd_bg
+            for dy in range(8) for dx in range(8)
+        )
+        assert visible >= 4, ("missing lcd icon", x, y, visible)
+print("PASS: eight LCD icons use aligned 4x2 grid")
+
 # The queue must use the same unscaled sprite and background as the board.
 for name, colours in (("five_colours_a", (1, 2, 3)),
                       ("five_colours_b", (4, 5, 1))):

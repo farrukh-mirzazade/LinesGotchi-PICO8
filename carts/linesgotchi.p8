@@ -883,9 +883,10 @@ function notice()
  ui_print(msg,64-#msg*2,94,10)
 end
 
-function mono_icon(sid,x,y,selected)
+function mono_icon(sid,x,y,selected,ink)
  pal()
- for c=1,15 do pal(c,1) end
+ ink=ink or 1
+ for c=1,15 do pal(c,ink) end
  spr(sid,x,y)
  pal()
  if selected then
@@ -1009,15 +1010,18 @@ function draw_pet_screen()
  rectfill(15,15,112,104,5)
  rect(14,14,113,105,1)
  rectfill(18,18,109,101,6)
- local xs={24,46,68,90}
+ -- Identical four-column grid for both icon rows.
+ local xs={24,48,72,96}
  local top={84,86,65,83}
  local bottom={85,80,82,87}
  for i=1,4 do mono_icon(top[i],xs[i],21,care_mode==0 and menu_i==i) end
  for i=1,4 do
   local selected=care_mode==0 and menu_i==i+4 and i<4
-  if i<4 or attention_needed() and flr(time()*4)%2==0 then
-   mono_icon(bottom[i],xs[i],90,selected)
+  local ink=1
+  if i==4 then
+   ink=attention_needed() and flr(time()*4)%2==0 and 1 or 5
   end
+  mono_icon(bottom[i],xs[i],90,selected,ink)
  end
  if care_mode>0 then
   draw_care_view()
