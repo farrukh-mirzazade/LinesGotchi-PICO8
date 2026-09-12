@@ -48,7 +48,9 @@ The current cart derives growth stage from virtual age:
 
 One age day is earned after ten active care ticks. Age, health, discipline,
 care mistakes, mess, illness, light state, medicine doses and care time are
-stored in cartdata. Adult species branching from care quality is still pending.
+stored in cartdata. At age 6, care mistakes select one of three adult
+silhouettes: good, average, or neglected. Baby remains round without limbs;
+Child gains feet, Teen gains simple limbs, and Adult gains a branch detail.
 
 Healthy weight is 6-16. Weight outside that range gradually lowers the
 maximum sustainable health; returning to the healthy range restores health

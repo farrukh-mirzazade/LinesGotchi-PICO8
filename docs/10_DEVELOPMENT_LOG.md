@@ -197,11 +197,17 @@ Commits already published:
 - Removed tomato inventory from feeding and RPG level rewards from the Lines
   result. Growth stage now follows virtual age. Lines remains the hybrid's
   central mini-game and still affects hunger, happiness and weight.
-- Added cartdata schema slots 24-31 for the new care state while preserving old
+- Added cartdata schema slots 24-36 for the new care state while preserving old
   saves and record slots.
 - Reworked the pet view as an egg-shaped pale shell with a monochrome LCD and
   three physical-button marks. No copyrighted Bandai logo or character sprite
   was introduced; the round LinesGotchi baby remains the pet.
 - Replaced obsolete care tests with interaction and state tests for all seven
-  icons. Native suite passes 51 checks; five-colour queue comparisons pass;
+  icons. Native suite passes 50 checks; five-colour queue comparisons pass;
   `can_reach` and `clear_lines` hashes remain unchanged.
+- Follow-up audit added persisted death/new-egg state, a short protected egg
+  hatch, original-style X+Left sound toggle, and visible Child/Teen/Adult
+  silhouette changes. Adult form branches into three care-quality variants.
+- Removed unreachable legacy Stats, Records and Settings screen code after the
+  single-LCD menu replaced it. Records remain available on Status page 4 and
+  sound remains available through the original-style shortcut.

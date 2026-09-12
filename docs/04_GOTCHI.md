@@ -44,28 +44,29 @@ For MVP, this can be simplified to a small expression/status indicator.
 - Hunger, unhappiness, sickness, mess, a false call, or light during sleep can
   activate the blinking Attention indicator. Three unresolved care ticks add a
   care mistake and reduce health.
-- Feeding is blocked while eating, sleeping, already full, or out of tomatoes.
+- Feeding is blocked while eating or sleeping. A full pet refuses another meal.
 - Sleep starts automatically and gradually restores energy. The light turns on
   automatically when the pet wakes.
 - Toilet and medicine rewards cannot be repeated without a matching need.
 - Quitting Lines does not grant records, end-of-game rewards, EXP, or age.
+- Hold `X` and press Left on the main LCD to toggle sound, matching the
+  original toy's C+A shortcut with the LinesGotchi button mapping.
+- After death, `O` creates an egg; it hatches after a short protected delay.
 
 ## Energy And Sleep
 
 - Energy ranges from 0 to 100. New profiles and pre-energy saves start at 80.
-- Awake time costs 1 energy per 900 updates (30 seconds at 30fps).
+- Awake time costs 2 energy per 900 updates (30 seconds at 30fps).
 - Each successful Lines move costs 1 energy. Cursor movement and failed moves
   do not invoke that cost. Energy cannot fall below zero.
 - New Lines sessions cannot start at zero energy or while sleeping. A session
   already in progress is not forcibly interrupted when energy reaches zero.
 - Sleep restores 2 energy every 30 updates, stopping automatically at 100.
   From zero it takes 50 seconds; from 80 it takes 10 seconds.
-- Repeated confirmation does not restart sleep or award extra stats. A fully
-  rested pet refuses sleep. Feeding and starting Lines are blocked during sleep.
-- The existing sleep panel shows energy percent; a plus prefix means sleeping.
-  No panel, icon, sprite or layout redesign was introduced.
-- Cartdata slots 21/22 store energy and remaining sleep frames; slot 23 marks
-  the energy schema. The existing save namespace and older slots are preserved.
+- Feeding and starting Lines are blocked during sleep. Leaving the light on
+  activates Attention; the light turns on automatically after waking.
+- Cartdata slots 21/22 store energy and remaining sleep frames; later schema
+  slots preserve illness, mess, discipline calls, death, egg and species state.
 - Sleep resumes from its saved phase after reloading. Closed/paused time is not
   simulated: recovery and energy drain advance only on game updates.
 - Invalid saved energy/duration values are bounded, and a positive sleep timer

@@ -11,6 +11,7 @@ pixel-perfect PICO-8 sprite sheet.
 - Left/Right: select a care icon or submenu item (the original A-button role).
 - `O`: open or confirm (B-button role).
 - `X`: cancel or return (C-button role).
+- Hold `X` and press Left: toggle sound.
 - The Game icon starts Lines; its own controls are shown on screen.
 
 ## Local Tools

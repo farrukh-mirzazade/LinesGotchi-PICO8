@@ -14,7 +14,8 @@
 - Main UI displays `full = 100 - hunger`; feeding fills this bar.
 - Feeding does not increase happiness in MVP.
 - Death and new-egg restart are implemented.
-- Stage timing is implemented; distinct evolved species and sprites remain.
+- Stage timing and three care-quality adult silhouettes are implemented. Fully
+  distinct sprite-sheet characters for each branch remain a later art pass.
 - Pet appears during Lines as a compact expression/status indicator.
 - Weight affects health gradually. The healthy range is `6..16`; values outside
   it lower sustainable health over care ticks.

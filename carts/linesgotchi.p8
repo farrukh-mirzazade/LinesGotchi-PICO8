@@ -9,9 +9,6 @@ __lua__
 s_pet=0
 s_lines=1
 s_result=2
-s_stats=3
-s_records=4
-s_settings=5
 
 scr=s_pet
 menu_i=1
@@ -23,8 +20,6 @@ quit_confirm=false
 clear_cells={}
 clear_timer=0
 care_clock=0
-settings_i=1
-stats_i=1
 care_mode=0
 care_choice=1
 status_page=1
@@ -66,7 +61,9 @@ pet={
  care_mistakes=0,
  care_ticks=0,
  need_ticks=0,
- dead=false
+ dead=false,
+ species=1,
+ egg_t=0
 }
 
 -- records
@@ -114,6 +111,10 @@ function _update()
   save_state()
  end
  if pet.eating_t>0 then pet.eating_t-=1 end
+ if pet.egg_t>0 then
+  pet.egg_t-=1
+  if pet.egg_t==0 then set_msg("hello!",45) save_state() end
+ end
  update_sleep()
  if msg_timer>0 then
   msg_timer-=1
@@ -123,9 +124,6 @@ function _update()
  if scr==s_pet then update_pet()
  elseif scr==s_lines then update_lines()
  elseif scr==s_result then update_result()
- elseif scr==s_stats then update_stats()
- elseif scr==s_records then update_nav_screen()
- elseif scr==s_settings then update_settings()
  end
 end
 
@@ -134,9 +132,6 @@ function _draw()
  if scr==s_pet then draw_pet_screen()
  elseif scr==s_lines then draw_lines_screen()
  elseif scr==s_result then draw_result_screen()
- elseif scr==s_stats then draw_stats_screen()
- elseif scr==s_records then draw_records_screen()
- elseif scr==s_settings then draw_settings_screen()
  end
 end
 
@@ -197,6 +192,12 @@ function load_save()
    pet.care_mistakes=max(0,flr(dget(29)))
    pet.care_ticks=max(0,flr(dget(30)))
   end
+  if dget(36)==1 then
+   pet.dead=dget(32)==1
+   pet.need_ticks=clamp(flr(dget(33)),0,2)
+   pet.species=clamp(flr(dget(34)),1,3)
+   pet.egg_t=clamp(flr(dget(35)),0,150)
+  end
  end
  attention_lit=attention_needed()
 end
@@ -234,6 +235,11 @@ function save_state()
  dset(29,pet.care_mistakes)
  dset(30,pet.care_ticks)
  dset(31,1)
+ dset(32,pet.dead and 1 or 0)
+ dset(33,pet.need_ticks)
+ dset(34,pet.species)
+ dset(35,pet.egg_t)
+ dset(36,1)
 end
 
 function clamp(v,lo,hi)
@@ -254,7 +260,7 @@ function play_sound(id)
 end
 
 function attention_needed()
- return not pet.dead and
+ return not pet.dead and pet.egg_t==0 and
   (pet.sick or pet.poop>0 or pet.false_call or
    pet.hunger>=80 or pet.happy<=20 or
    (pet.sleeping_t>0 and pet.lights_on))
@@ -267,7 +273,7 @@ function refresh_attention()
 end
 
 function advance_care()
- if pet.dead then return end
+ if pet.dead or pet.egg_t>0 then return end
  pet.care_ticks+=1
  pet.hunger=clamp(pet.hunger+2,0,100)
  if pet.care_ticks%2==0 then
@@ -307,6 +313,10 @@ function advance_care()
  if pet.care_ticks%10==0 then
   pet.age+=1
   pet.age_progress=0
+  if pet.age==6 then
+   pet.species=pet.care_mistakes<=2 and 1 or
+               pet.care_mistakes<=6 and 2 or 3
+  end
  end
  update_weight_health()
  if pet.sick then pet.health=max(0,pet.health-3) end
@@ -321,11 +331,18 @@ function advance_care()
 end
 
 function update_pet()
+ if pet.egg_t>0 then return end
  if pet.dead then
   if btnp(4) then hatch_pet() end
   return
  end
  if care_mode==0 then
+  if btn(5) and btnp(0) then
+   sound_on=not sound_on
+   set_msg(sound_on and "sound on" or "sound off",40)
+   save_state()
+   return
+  end
   if btnp(0) then menu_i=(menu_i+5)%7+1 play_sound(0) end
   if btnp(1) then menu_i=menu_i%7+1 play_sound(0) end
   if btnp(4) then open_menu() end
@@ -432,11 +449,13 @@ function hatch_pet()
  pet.poop=0 pet.sick=false pet.medicine_left=0 pet.lights_on=true
  pet.false_call=false pet.care_mistakes=0 pet.care_ticks=0
  pet.need_ticks=0 pet.dead=false pet.sleeping_t=0 pet.eating_t=0
+ pet.species=1 pet.egg_t=150 pet.lights_on=true
  set_msg("a new egg!",60)
  save_state()
 end
 
 function start_lines()
+ if pet.dead or pet.egg_t>0 then set_msg("not ready",40) return end
  if pet.sleeping_t>0 then set_msg("let me sleep",40) return end
  if pet.energy<=0 then set_msg("need sleep",40) return end
  scr=s_lines
@@ -647,47 +666,6 @@ function update_result()
  if btnp(4) or btnp(5) then show_pet() end
 end
 
-function update_nav_screen()
- if btnp(0) then menu_i=max(1,menu_i-1) play_sound(0) end
- if btnp(1) then menu_i=min(5,menu_i+1) play_sound(0) end
- if btnp(4) then open_menu() end
- if btnp(5) then show_pet() end
-end
-
-function update_settings()
- if btnp(2) then settings_i=max(1,settings_i-1) play_sound(0) end
- if btnp(3) then settings_i=min(2,settings_i+1) play_sound(0) end
- if btnp(0) then menu_i=max(1,menu_i-1) play_sound(0) end
- if btnp(1) then menu_i=min(5,menu_i+1) play_sound(0) end
- if btnp(4) then
-  if menu_i~=5 then
-   open_menu()
-  elseif settings_i==1 then
-   sound_on=not sound_on
-   if sound_on then sfx(0) end
-  else
-   hints_on=not hints_on
-   play_sound(1)
-  end
-  save_state()
- end
- if btnp(5) then show_pet() end
-end
-
-function update_stats()
- if btnp(5) then show_pet() return end
- if btnp(2) then stats_i=max(0,stats_i-1) play_sound(0) end
- if btnp(3) then stats_i=min(2,stats_i+1) play_sound(0) end
- if btnp(0) then menu_i=max(1,menu_i-1) play_sound(0) end
- if btnp(1) then menu_i=min(5,menu_i+1) play_sound(0) end
- if btnp(4) then
-  if menu_i~=3 then open_menu()
-  elseif stats_i==0 then feed_pet()
-  elseif stats_i==1 then use_toilet()
-  else put_pet_to_sleep() end
- end
-end
-
 function use_toilet()
  if pet.poop<=0 then
   set_msg("no mess",35)
@@ -700,22 +678,6 @@ function use_toilet()
  end
  play_sound(1)
  refresh_attention()
-end
-
-function put_pet_to_sleep()
- if pet.eating_t>0 then
-  set_msg("still eating",20)
- elseif pet.sleeping_t>0 then
-  set_msg("already asleep",30)
- elseif pet.energy>=100 then
-  set_msg("already rested",30)
- else
-  pet.sleeping_t=flr((101-pet.energy)/2)*30
-  pet.sleep_ready=false
-  set_msg("sweet dreams",45)
-  save_state()
-  play_sound(1)
- end
 end
 
 function update_sleep()
@@ -939,6 +901,32 @@ function draw_lcd_pet(x,y)
  pal(7,6) pal(12,1) pal(6,1) pal(13,1) pal(14,1)
  draw_pet_sprite(x,y,current_pet_state())
  pal()
+ local stage=pet_stage()
+ if stage~="baby" then
+  line(x+4,y+23,x+7,y+23,1)
+  line(x+17,y+23,x+20,y+23,1)
+ end
+ if stage=="teen" or stage=="adult" then
+  line(x-2,y+13,x+1,y+14,1)
+  line(x+22,y+14,x+25,y+13,1)
+ end
+ if stage=="adult" then
+  if pet.species==1 then
+   line(x+7,y,x+9,y-3,1) line(x+16,y,x+14,y-3,1)
+  elseif pet.species==2 then
+   rectfill(x-2,y+7,x,y+10,1) rectfill(x+23,y+7,x+25,y+10,1)
+  else
+   pset(x+5,y-1,1) pset(x+11,y-3,1) pset(x+18,y-1,1)
+  end
+ end
+end
+
+function draw_egg()
+ ovalfill(52,43,76,76,6)
+ oval(52,43,76,76,1)
+ line(54,57,61,53,1) line(61,53,67,59,1)
+ line(67,59,74,54,1)
+ print("egg",58,80,1)
 end
 
 function hearts(value,y)
@@ -1033,6 +1021,9 @@ function draw_pet_screen()
  end
  if care_mode>0 then
   draw_care_view()
+ elseif pet.egg_t>0 then
+  rectfill(22,32,105,87,6)
+  draw_egg()
  elseif pet.dead then
   rectfill(22,32,105,87,6)
   print("goodbye",50,47,1)
@@ -1142,78 +1133,6 @@ function draw_clear_particles()
  end
 end
 
-function draw_stats_screen()
- device_bezel(8)
- inner_screen(5,15,86,103,1)
- inner_screen(8,18,37,46,7)
- draw_pet_sprite(11,20,current_pet_state())
- ui_print("lv "..pet.level,42,21,7)
- draw_bar(42,30,38,4,pet.exp/pet.max_exp*100,14)
- ui_print(number_text(pet.exp).."/"..number_text(pet.max_exp),42,38,10)
- ui_print(pet_stage(),42,46,14)
- local vals={full(),pet.happy,total_lines,games_played}
- local labels={"full","mood","lines","games"}
- local cols={11,10,14,12}
- for i=1,4 do
-  local y=53+(i-1)*12
-  spr(79+i,10,y)
-  ui_print(labels[i],22,y+2,cols[i])
-  right_number(vals[i],80,y+2,7)
- end
- inner_screen(89,15,122,42,1)
- if stats_i==0 then rect(89,15,122,42,10) end
- spr(84,94,20)
- right_number(pet.tomatoes,117,31,7)
- panel(89,46,122,73,1,stats_i==1 and 10 or 6)
- spr(85,102,50)
- local toilet_col = stats_i==1 and 1 or 12
- ui_print(pet.toilet_ok and "clean" or "use",96,63,toilet_col)
- panel(89,77,122,103,1,stats_i==2 and 10 or 6)
- spr(86,101,82)
- ui_print((pet.sleeping_t>0 and "+" or "")..pet.energy.."%",96,95,10)
- notice()
- draw_nav(menu_i)
-end
-
-function draw_records_screen()
- device_bezel(11)
- inner_screen(5,15,122,103,1)
- -- Decorative category strip; only local saved records are displayed.
- panel(8,18,43,29,8,6)
- spr(67,22,20)
- ui_print("local records",51,22,7)
- local labels={"best","games","lines","longest"}
- local values={hi_score,games_played,total_lines,best_line}
- local icons={67,65,82,83}
- for i=1,4 do
-  local y=35+(i-1)*14
-  spr(icons[i],11,y)
-  ui_print(labels[i],25,y+2,7)
-  right_number(values[i],115,y+2,i==1 and 10 or 7)
-  line(10,y+11,117,y+11,5)
- end
- draw_nav(menu_i)
-end
-
-function draw_settings_screen()
- device_bezel(13)
- inner_screen(5,15,122,103,1)
- ui_print("settings",12,22,7)
- line(9,31,118,31,5)
- for i=1,2 do
-  local y=39+(i-1)*23
-  local on=i==1 and sound_on or i==2 and hints_on
-  if settings_i==i then rect(9,y-4,118,y+13,10) end
-  spr(i==1 and 68 or 69,13,y)
-  ui_print(i==1 and "sound" or "hints",27,y+2,7)
-  rectfill(95,y,112,y+7,on and 3 or 5)
-  rectfill(on and 105 or 96,y+1,on and 111 or 102,y+6,7)
- end
- spr(84,13,88)
- ui_print("saved locally",27,90,7)
- draw_nav(menu_i)
-end
-
 function draw_result_screen()
  device_bezel(8)
  inner_screen(8,18,119,104,1)
@@ -1229,20 +1148,6 @@ function draw_result_screen()
  end
  line(12,95,115,95,5)
  ui_print("o continue",44,110,7)
-end
-
-function draw_nav(active)
- -- Five 22px buttons, 1px gutters, all within x=7..120.
- for i=1,5 do
-  local x=7+(i-1)*23
-  local on=i==active
-  rectfill(x,107,x+21,121,on and 10 or 1)
-  rect(x,107,x+21,121,on and 7 or 6)
-  line(x+1,120,x+20,120,on and 9 or 5)
-  if on then pal(7,1) pal(10,1) end
-  spr(63+i,x+7,110)
-  pal(0)
- end
 end
 
 function panel(x0,y0,x1,y1,fill_col,edge_col)

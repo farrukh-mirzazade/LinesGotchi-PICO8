@@ -28,6 +28,8 @@ dset=function(k,v) storage[k]=v end
 dget=function(k) return storage[k] or 0 end
 local key=-1
 btnp=function(k) return k==key end
+local held=-1
+btn=function(k) return k==held end
 local passed=0
 function check(ok,label)
  if not ok then
@@ -53,6 +55,9 @@ function _init()
  pet.hunger=60 pet.happy=50 pet.weight=10 pet.eating_t=0
  show_pet() key=5 update_pet()
  check(pet.hunger==60 and care_mode==0,"x is harmless on main lcd")
+ sound_on=true held=5 key=0 update_pet()
+ check(not sound_on and menu_i==1,"x plus left toggles sound")
+ held=-1
  key=0 update_pet()
  check(menu_i==7,"left wraps care icons")
  key=1 update_pet()
@@ -70,7 +75,7 @@ function _init()
  check(pet.happy==65 and pet.weight==13,"snack raises happiness and weight")
  key=5 update_pet()
  check(care_mode==0,"x closes submenu")
- for screen in all({s_pet,s_lines,s_result,s_stats,s_records,s_settings}) do
+ for screen in all({s_pet,s_lines,s_result}) do
   start_lines()
   scr=screen care_clock=0 menu_i=1
   care_mode=0 pet.hunger=60 pet.tomatoes=10 pet.eating_t=0
@@ -137,8 +142,17 @@ function _init()
  check(pet.poop==2 and pet.sick and pet.medicine_left==2 and pet.false_call,
        "new care state survives reload")
  check(pet.care_mistakes==7 and pet.care_ticks==8,"care history survives reload")
- pet.dead=true key=4 update_pet()
- check(not pet.dead and pet.age==0 and pet.health==100,"new egg restarts life")
+ pet.dead=true pet.egg_t=0 save_state()
+ pet.dead=false load_save()
+ check(pet.dead,"death survives reload")
+ key=4 update_pet()
+ check(not pet.dead and pet.egg_t==150 and pet.age==0 and pet.health==100,
+       "new egg restarts life")
+ save_state() pet.egg_t=0 load_save()
+ check(pet.egg_t==150,"egg countdown survives reload")
+ scr=s_pet start_lines()
+ check(scr==s_pet,"egg cannot start game")
+ pet.egg_t=0
  pet.energy=80 pet.sleeping_t=0 pet.lights_on=true
  key=-1
  key=-1
@@ -183,14 +197,6 @@ function _init()
  pet.hunger=0 pet.happy=0 pet.weight=1
  load_save()
  check(pet.hunger==37 and pet.happy==64 and pet.weight==12,"save roundtrip")
- scr=s_settings menu_i=5 settings_i=1 key=4
- local on=sound_on
- update_settings()
- check(sound_on~=on,"sound toggle")
- sound_on=false
- settings_i=2 on=hints_on
- update_settings()
- check(hints_on~=on,"hints toggle")
  key=-1 hints_on=true
  pet.hunger=15 pet.happy=55 pet.weight=10
  msg="" pet.eating_t=0 pet.sleeping_t=0
@@ -226,14 +232,6 @@ function _init()
  msg="no path"
  snap("message")
  msg=""
- scr=s_stats menu_i=3
- snap("stats")
- stats_i=2
- snap("stats_sleep")
- scr=s_records menu_i=4
- snap("records")
- scr=s_settings menu_i=5
- snap("settings")
  scr=s_result result_reason="quit"
  snap("result")
  scr=s_lines score=32767 pet.happy=100 pet.hunger=0
@@ -258,10 +256,10 @@ result = subprocess.run(
 )
 print(result.stdout, result.stderr)
 assert result.returncode == 0, "PICO-8 exited with an error"
-assert "PASS: 51 native checks" in result.stdout, "Native checks did not finish"
+assert "PASS: 50 native checks" in result.stdout, "Native checks did not finish"
 assert "FAIL:" not in result.stdout, "Native assertion failed"
 for name in ("pet", "pet_food", "pet_light", "pet_status", "pet_attention",
-             "lines", "stats", "records", "settings", "quit", "result"):
+             "lines", "quit", "result"):
     assert (OUT / (name + ".png")).exists(), "Missing screenshot: " + name
     image = Image.open(OUT / (name + ".png")).convert("RGB")
     assert image.size == (512, 512), name + " dimensions"
