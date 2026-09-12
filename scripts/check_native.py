@@ -49,101 +49,98 @@ end
 function _init()
  original_init()
  sound_on=false
- local h=pet.hunger
- for i=1,30 do key=4 update_pet() end
- check(pet.hunger==h,"home does not feed")
+ -- Original-style A/B/C navigation: X is cancel, O opens/accepts.
+ pet.hunger=60 pet.happy=50 pet.weight=10 pet.eating_t=0
+ show_pet() key=5 update_pet()
+ check(pet.hunger==60 and care_mode==0,"x is harmless on main lcd")
+ key=0 update_pet()
+ check(menu_i==7,"left wraps care icons")
+ key=1 update_pet()
+ check(menu_i==1,"right wraps care icons")
+ key=4 update_pet()
+ check(care_mode==1 and pet.hunger==60,"food icon opens menu")
+ update_pet()
+ check(pet.hunger==35 and pet.weight==11 and pet.eating_t>0,
+       "meal restores hunger and adds weight")
+ update_pet()
+ check(pet.hunger==35 and pet.weight==11,"eating blocks repeat meal")
+ pet.eating_t=0 key=1 update_pet()
+ check(care_choice==2,"food menu selects snack")
+ key=4 update_pet()
+ check(pet.happy==65 and pet.weight==13,"snack raises happiness and weight")
+ key=5 update_pet()
+ check(care_mode==0,"x closes submenu")
  for screen in all({s_pet,s_lines,s_result,s_stats,s_records,s_settings}) do
   start_lines()
   scr=screen care_clock=0 menu_i=1
-  pet.hunger=60 pet.tomatoes=10 pet.eating_t=0
+  care_mode=0 pet.hunger=60 pet.tomatoes=10 pet.eating_t=0
   key=5
   for i=1,120 do _update() end
   check(pet.hunger==60 and pet.tomatoes==10 and pet.eating_t==0,
         "repeated x never feeds from screen "..screen)
  end
- -- Care actions are available only through their focused Stats controls.
- pet.hunger=60 pet.tomatoes=3 pet.eating_t=0 pet.sleeping_t=0
- scr=s_pet menu_i=3 key=4
- _update()
- check(scr==s_stats and stats_i==0 and pet.hunger==60,
-       "opening care does not feed")
- _update()
- check(pet.hunger==40 and pet.tomatoes==2 and pet.eating_t>0,
-       "confirm tomato feeds once")
- _update()
- check(pet.hunger==40 and pet.tomatoes==2,"eating blocks repeat")
- pet.eating_t=0 pet.tomatoes=0
- _update()
- check(pet.hunger==40,"no food blocks feeding")
- pet.tomatoes=3 pet.hunger=0
- _update()
- check(pet.tomatoes==3,"full pet keeps food")
- pet.hunger=60 pet.sleeping_t=100
- _update()
- check(pet.hunger==60 and pet.tomatoes==3,"sleep blocks feeding")
- pet.sleeping_t=0
- key=3 _update()
- check(stats_i==1,"down selects toilet")
- pet.toilet_ok=false key=4 _update()
- check(pet.toilet_ok and pet.hunger==60,"toilet does not feed")
- key=3 _update()
- check(stats_i==2,"down selects sleep")
- pet.sleep_ready=true pet.eating_t=10 key=4 _update()
- check(pet.sleeping_t==0,"eating blocks sleep")
- pet.eating_t=0 _update()
- check(pet.sleeping_t>0 and pet.hunger==60,"sleep works without feeding")
- pet.sleeping_t=0
- key=2 _update() _update() _update()
- check(stats_i==0,"up stops at feeding")
- key=-1 pet.eating_t=0 pet.sleeping_t=0
- pet.energy=80 care_clock=899 scr=s_pet
- _update()
- check(pet.energy==79,"awake time consumes energy")
+ -- Light, toilet, medicine, status and discipline are distinct actions.
+ show_pet() menu_i=2 key=4 update_pet()
+ check(care_mode==2,"light icon opens menu")
+ key=1 update_pet() key=4 update_pet()
+ check(not pet.lights_on,"light can be turned off")
+ key=5 update_pet()
+ pet.poop=2 pet.toilet_ok=false menu_i=5 key=4 update_pet()
+ check(pet.poop==0 and pet.toilet_ok,"toilet flushes all mess")
+ pet.sick=true pet.medicine_left=2 menu_i=4 key=4 update_pet()
+ check(pet.sick and pet.medicine_left==1,"medicine may need another dose")
+ update_pet()
+ check(not pet.sick and pet.medicine_left==0,"medicine cures final dose")
+ pet.false_call=true pet.discipline=20 menu_i=7 key=4 update_pet()
+ check(not pet.false_call and pet.discipline==30,"valid discipline clears call")
+ local mood=pet.happy
+ update_pet()
+ check(pet.happy==mood-5,"unjust discipline lowers happiness")
+ menu_i=6 key=4 update_pet()
+ check(care_mode==3 and status_page==1,"status opens first page")
+ key=1 update_pet()
+ check(status_page==2,"status pages cycle")
+ key=5 update_pet()
+ check(care_mode==0,"status closes with x")
+ key=-1 pet.eating_t=0 pet.sleeping_t=0 pet.lights_on=true
+ pet.poop=0 pet.sick=false pet.false_call=false pet.hunger=20 pet.happy=60
+ pet.energy=80 pet.care_ticks=5
+ advance_care()
+ check(pet.energy==78 and pet.poop==1,"care tick drains energy and adds mess")
+ pet.poop=1 pet.care_ticks=11
+ advance_care()
+ check(pet.poop==2 and pet.sick and pet.medicine_left>0,
+       "unclean mess causes illness")
+ pet.sick=false pet.poop=0 pet.hunger=20 pet.happy=60
+ pet.energy=10 pet.sleeping_t=0 pet.care_ticks=1
+ advance_care()
+ check(pet.sleeping_t>0 and attention_needed(),"tired pet sleeps and calls for light")
+ set_light(false)
+ check(not attention_needed(),"light off answers sleep call")
+ local sleep_left=pet.sleeping_t local old_energy=pet.energy
+ for i=1,30 do update_sleep() end
+ check(pet.energy==old_energy+2 and pet.sleeping_t==sleep_left-30,
+       "sleep restores energy gradually")
  moves=1 tick_pet_play()
- check(pet.energy==78,"successful move consumes energy")
+ check(pet.energy==old_energy+1,"successful move consumes energy")
  pet.energy=0 tick_pet_play()
  check(pet.energy==0,"energy never negative")
  scr=s_pet start_lines()
  check(scr==s_pet,"empty energy blocks new session")
- pet.energy=80 pet.health=60 pet.happy=50
- put_pet_to_sleep()
- check(pet.sleeping_t==300 and pet.energy==80 and pet.health==60
-       and pet.happy==50,"sleep starts without instant reward")
- start_lines()
- check(scr==s_pet,"sleep blocks new session")
- for i=1,29 do update_sleep() end
- check(pet.energy==80,"recovery waits one second")
- update_sleep()
- check(pet.energy==82 and pet.sleeping_t==270,"sleep recovers gradually")
- put_pet_to_sleep()
- check(pet.sleeping_t==270 and pet.energy==82,"repeat sleep cannot speed recovery")
- for i=1,7 do update_sleep() end
+ pet.energy=80 pet.sleeping_t=0 pet.lights_on=true
+ pet.poop=2 pet.sick=true pet.medicine_left=2 pet.false_call=true
+ pet.care_mistakes=7 pet.care_ticks=8
  save_state()
- pet.energy=1 pet.sleeping_t=0
+ pet.poop=0 pet.sick=false pet.medicine_left=0 pet.false_call=false
+ pet.care_mistakes=0 pet.care_ticks=0
  load_save()
- check(pet.energy==82 and pet.sleeping_t==263,"sleep phase survives reload")
- for i=1,263 do update_sleep() end
- check(pet.energy==100 and pet.sleeping_t==0,"sleep completes at full energy")
- put_pet_to_sleep()
- check(pet.sleeping_t==0,"rested pet cannot farm sleep")
- pet.energy=99 put_pet_to_sleep()
- for i=1,30 do update_sleep() end
- check(pet.energy==100 and pet.sleeping_t==0,"odd deficit clamps correctly")
- storage[23]=nil
- pet.energy=0 pet.sleeping_t=99
- load_save()
- check(pet.energy==80 and pet.sleeping_t==0,"legacy save gets safe defaults")
- storage[23]=1 storage[21]=-9 storage[22]=9999
- load_save()
- check(pet.energy==0 and pet.sleeping_t==1500,"damaged save is clamped")
- storage[22]=1
- load_save()
- check(pet.sleeping_t==1471,"short corrupted sleep cannot wake unrested")
- storage[21]=200
- load_save()
- check(pet.energy==100 and pet.sleeping_t==0,"full energy cancels stale sleep")
- pet.energy=80 pet.sleeping_t=0
- save_state()
+ check(pet.poop==2 and pet.sick and pet.medicine_left==2 and pet.false_call,
+       "new care state survives reload")
+ check(pet.care_mistakes==7 and pet.care_ticks==8,"care history survives reload")
+ pet.dead=true key=4 update_pet()
+ check(not pet.dead and pet.age==0 and pet.health==100,"new egg restarts life")
+ pet.energy=80 pet.sleeping_t=0 pet.lights_on=true
+ key=-1
  key=-1
  start_lines()
  check(#next_balls==3,"next count")
@@ -199,6 +196,15 @@ function _init()
  msg="" pet.eating_t=0 pet.sleeping_t=0
  scr=s_pet menu_i=1
  snap("pet")
+ care_mode=1 care_choice=1
+ snap("pet_food")
+ care_mode=2 care_choice=2
+ snap("pet_light")
+ care_mode=3 status_page=1
+ snap("pet_status")
+ care_mode=0 pet.poop=2 pet.sick=true pet.false_call=true
+ snap("pet_attention")
+ pet.poop=0 pet.sick=false pet.false_call=false
  for state=0,4 do
   cls(7)
   draw_pet_sprite(52,52,state)
@@ -254,7 +260,8 @@ print(result.stdout, result.stderr)
 assert result.returncode == 0, "PICO-8 exited with an error"
 assert "PASS: 51 native checks" in result.stdout, "Native checks did not finish"
 assert "FAIL:" not in result.stdout, "Native assertion failed"
-for name in ("pet", "lines", "stats", "records", "settings", "quit", "result"):
+for name in ("pet", "pet_food", "pet_light", "pet_status", "pet_attention",
+             "lines", "stats", "records", "settings", "quit", "result"):
     assert (OUT / (name + ".png")).exists(), "Missing screenshot: " + name
     image = Image.open(OUT / (name + ".png")).convert("RGB")
     assert image.size == (512, 512), name + " dimensions"

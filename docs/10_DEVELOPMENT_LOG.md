@@ -151,3 +151,57 @@ Commits already published:
   screen geometry changes. Detailed initial balance is in [[04_GOTCHI]].
 - Native suite passes 51 assertions plus five-colour pixel comparisons;
   can_reach and clear_lines remain byte-identical to their baseline.
+
+## 2026-09-05 - Cartridge Cover
+
+- Generated cover with built-in imagegen: LinesGotchi title, round blue baby
+  pet without limbs, cozy room and five-colour Lines board.
+- Source artwork: `assets/design/linesgotchi_cover_v1.png`.
+- Imported the cover with local PICO-8 into its 128x128 label format; preview:
+  `assets/design/linesgotchi_cover_label.png`.
+- Replaced only `__label__` in `carts/linesgotchi.p8`. Code, sprites, audio,
+  and gameplay are unchanged. Visually checked the native PNG export.
+- Shareable PICO-8 cartridge: `exports/linesgotchi.p8.png`. This is a playable
+  cartridge for PICO-8, not a standalone browser build.
+
+### Cover Revision: Small-Label Composition
+
+- User rejected the detailed first cover at cartridge size. Generated v2
+  with built-in imagegen, specifically composed for a 128x128 label.
+- Prompt: two-line Lines/Gotchi title with margins, large round blue baby
+  without limbs, five evenly spaced coloured balls, simple flat background,
+  PICO-8 palette, no room details or decorative frame.
+- Source: `assets/design/linesgotchi_cover_v2.png`. The generator returned
+  larger raster artwork; PICO-8 imported it into its native label format.
+  This is not a claim that the generator produced a native 128x128 file.
+- Updated `linesgotchi_cover_label.png`, cart label and PNG cartridge export.
+  Inspected both the 128x128 label and the complete 160x205 cartridge.
+- Compared against the pre-revision cart: every byte outside `__label__`
+  is unchanged. No gameplay tests needed for this label-only replacement.
+- Centered the label artwork on request: moved existing pixels 5 pixels left
+  and 4 pixels up, without scaling or redrawing. Horizontal margins are now
+  13 pixels each; vertical margins are 3 and 4 pixels. Re-exported the label
+  preview and PNG cartridge and visually checked the result.
+
+## 2026-09-12 - Original Virtual-Pet Care Loop
+
+- Replaced the five-tab application navigation on the pet screen with a single
+  classic LCD and original-style A/B/C interaction: Left/Right select, O
+  confirms, X cancels.
+- Added Food (Meal/Snack), Light (On/Off), Game (Lines), Medicine, Toilet,
+  four-page Status and Discipline. The eighth icon is a blinking Attention
+  indicator rather than a selectable command.
+- Added periodic mess, illness requiring one to three medicine doses, false
+  calls, justified and unjust discipline, unresolved-care mistakes, automatic
+  sleep, light stress during sleep, health loss, death and new-egg restart.
+- Removed tomato inventory from feeding and RPG level rewards from the Lines
+  result. Growth stage now follows virtual age. Lines remains the hybrid's
+  central mini-game and still affects hunger, happiness and weight.
+- Added cartdata schema slots 24-31 for the new care state while preserving old
+  saves and record slots.
+- Reworked the pet view as an egg-shaped pale shell with a monochrome LCD and
+  three physical-button marks. No copyrighted Bandai logo or character sprite
+  was introduced; the round LinesGotchi baby remains the pet.
+- Replaced obsolete care tests with interaction and state tests for all seven
+  icons. Native suite passes 51 checks; five-colour queue comparisons pass;
+  `can_reach` and `clear_lines` hashes remain unchanged.

@@ -13,8 +13,8 @@
 - Hunger scale direction: `0 = full`, `100 = starving`.
 - Main UI displays `full = 100 - hunger`; feeding fills this bar.
 - Feeding does not increase happiness in MVP.
-- Death is postponed after first playable build.
-- Evolution is postponed after first playable build.
+- Death and new-egg restart are implemented.
+- Stage timing is implemented; distinct evolved species and sprites remain.
 - Pet appears during Lines as a compact expression/status indicator.
 - Weight affects health gradually. The healthy range is `6..16`; values outside
   it lower sustainable health over care ticks.
@@ -26,4 +26,5 @@
 
 ## Visual Style
 
-- MVP uses full-color PICO-8 pixel-toy look with simple Tamagotchi-like layout.
+- Care screen uses an egg-shaped 1997-style shell, monochrome LCD, seven care
+  icons and blinking Attention. Lines remains colourful for game readability.

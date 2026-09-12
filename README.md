@@ -2,9 +2,16 @@
 
 PICO-8 project workspace for LinesGotchi: a compact hybrid of Color Lines and a virtual pet.
 
-The repository contains a playable local MVP with the pet-care loop, an 8x8
-Color Lines game, persistent records, settings, SFX, and a pixel-perfect PICO-8
-sprite sheet.
+The repository contains a playable local build with an original-style virtual
+pet care loop, an 8x8 Color Lines game, persistent state, SFX, and a
+pixel-perfect PICO-8 sprite sheet.
+
+## Controls
+
+- Left/Right: select a care icon or submenu item (the original A-button role).
+- `O`: open or confirm (B-button role).
+- `X`: cancel or return (C-button role).
+- The Game icon starts Lines; its own controls are shown on screen.
 
 ## Local Tools
 
@@ -25,17 +32,19 @@ sprite sheet.
 
 ## Current Target
 
-Stabilize and polish the playable MVP:
+Stabilize and polish the playable hybrid:
 
-- Pet screen.
-- `PLAY` action opens Lines.
+- Egg-shaped monochrome pet screen with Food, Light, Game, Medicine, Toilet,
+  Status, Discipline and Attention.
+- The Game icon opens Lines.
 - Lines raises happiness.
 - Lines increases hunger over time/activity.
-- Feeding lowers hunger and raises weight.
+- Meal lowers hunger; Snack raises happiness; both raise weight.
 - Lines slightly lowers weight.
 - Local records are saved.
 - Three upcoming balls are previewed before a non-scoring move.
-- Care, settings, growth state, and records persist through `cartdata`.
+- Care, growth state, illness, light state and records persist through
+  `cartdata`.
 - Visual work follows `assets/design/locked_reference.png`.
 
 See `docs/00_INDEX.md` for the living specification.

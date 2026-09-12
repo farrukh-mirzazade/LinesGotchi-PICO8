@@ -39,15 +39,16 @@ Evolution should eventually consider:
 
 ## Implemented Growth Foundation
 
-The current cart derives a growth stage from age or level:
+The current cart derives growth stage from virtual age:
 
-- Baby: age below 3 and level below 4.
-- Child: age 3+ or level 4+.
-- Teen: age 7+ or level 7+.
-- Adult: age 14+ or level 10+.
+- Baby: age below 1.
+- Child: age 1+.
+- Teen: age 3+.
+- Adult: age 6+.
 
-One age day is earned after three completed Lines sessions. Age, health,
-discipline, level progress, settings, and care state are stored in cartdata.
+One age day is earned after ten active care ticks. Age, health, discipline,
+care mistakes, mess, illness, light state, medicine doses and care time are
+stored in cartdata. Adult species branching from care quality is still pending.
 
 Healthy weight is 6-16. Weight outside that range gradually lowers the
 maximum sustainable health; returning to the healthy range restores health

@@ -12,11 +12,13 @@
 8. Pet history is saved locally.
 9. New generation begins.
 
-## MVP Loop
+## Implemented Loop
 
-1. Pet screen.
-2. `PLAY` starts Lines.
-3. Lines session ends.
-4. Result screen updates happiness, hunger, weight, and record stats.
-5. Return to pet screen.
-
+1. The LCD shows the pet and seven care icons.
+2. The player responds to hunger, low happiness, sleep, mess, illness, and
+   false attention calls.
+3. Food, light, medicine, toilet and discipline resolve different needs.
+4. Game starts Lines; its result changes happiness, hunger and weight.
+5. Unanswered needs become care mistakes and reduce health.
+6. Virtual age advances with care time; the pet grows through stages.
+7. If health reaches zero, the pet dies and `O` starts a new egg.

@@ -31,17 +31,23 @@ For MVP, this can be simplified to a small expression/status indicator.
 
 ## Implemented Care Rules
 
-- On the Pet screen, `O` activates the selected navigation item.
-- On the Pet screen, `X` has no care effect.
-- In Stats/care, Up/Down selects tomato (food), toilet, or sleep. `O`
-  confirms the selected care action; `X` returns home without applying care.
-- Home is navigation only and never changes pet stats.
-- Feeding consumes one tomato, lowers hunger, and raises weight.
-- Feeding does not increase happiness.
+- Left/Right cycles the seven original-style care icons. `O` opens or confirms
+  an action; `X` cancels a submenu and never applies care by itself.
+- Meal lowers hunger by 25 and adds one weight. Snack raises happiness by 15
+  and adds two weight. Feeding is blocked while eating or sleeping.
+- Light On/Off is controlled manually. The pet falls asleep automatically at
+  low energy; leaving the light on while it sleeps creates an attention need.
+- The pet creates mess periodically. Two uncleared messes cause illness.
+- Medicine takes one to three doses. Toilet clears all current mess.
+- A false attention call must be answered with Discipline. Correct discipline
+  raises its meter; unjust discipline lowers happiness.
+- Hunger, unhappiness, sickness, mess, a false call, or light during sleep can
+  activate the blinking Attention indicator. Three unresolved care ticks add a
+  care mistake and reduce health.
 - Feeding is blocked while eating, sleeping, already full, or out of tomatoes.
-- Sleep cannot start while eating.
-- Toilet rewards cannot be repeated without a new care need.
-- Sleep gradually restores energy, with no immediate health/happiness reward.
+- Sleep starts automatically and gradually restores energy. The light turns on
+  automatically when the pet wakes.
+- Toilet and medicine rewards cannot be repeated without a matching need.
 - Quitting Lines does not grant records, end-of-game rewards, EXP, or age.
 
 ## Energy And Sleep
@@ -65,4 +71,6 @@ For MVP, this can be simplified to a small expression/status indicator.
 - Invalid saved energy/duration values are bounded, and a positive sleep timer
   is constrained to the range consistent with the remaining energy deficit.
 
-These are initial balance values, not a final tuning decision.
+The main care tick is 900 updates, about 30 seconds at 30fps. One virtual age
+day is ten care ticks, about five active minutes. These compressed timings make
+the full loop testable in PICO-8 and remain balance values for later tuning.
