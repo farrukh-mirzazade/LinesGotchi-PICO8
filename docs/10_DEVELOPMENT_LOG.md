@@ -279,6 +279,9 @@ Commits already published:
   explicit new-generation confirmation.
 - Locked four-heart condition displays, the classic Meal/Snack food scope and
   two first-version mini-games: Lines plus one short classic-style game.
+- Defined the second game as five rounds of left/right prediction. Locked a
+  player-selected local bedtime with stage-dependent sleep duration and a
+  five-minute repeating Attention call that respects the sound setting.
 - Locked each Egg to its selected timing profile, added an explicit unlimited
   Pause that freezes the simulation, and set healthy natural lifespan to
   roughly 10 to 14 real days with earlier death from poor care.

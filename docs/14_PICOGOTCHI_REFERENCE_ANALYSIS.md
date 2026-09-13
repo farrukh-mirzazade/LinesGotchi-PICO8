@@ -136,6 +136,12 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
 - Each visible condition meter uses four hearts.
 - The first release includes two mini-games: Lines and one short classic-style
   guessing or reaction game.
+- The short game is a five-round left/right prediction game: the player guesses
+  which direction the pet will turn.
+- Sleep follows local time. The player chooses a convenient bedtime, while the
+  required sleep duration depends on the current growth stage.
+- An unresolved Attention call repeats its sound every five minutes while the
+  indicator continues blinking. The global sound setting still mutes calls.
 
 ## Recommended Implementation Order
 
