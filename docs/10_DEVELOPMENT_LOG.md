@@ -274,6 +274,9 @@ Commits already published:
 - Limited names to six characters and selected dual on-screen/physical
   keyboard entry. Status values will be displayed as hearts on separate pages,
   with exact numeric values kept internal.
+- Locked a common starting Egg, five-entry Hall of Gotchi history, and a
+  two-part death ending: short farewell scene followed by a memorial screen and
+  explicit new-generation confirmation.
 - Locked each Egg to its selected timing profile, added an explicit unlimited
   Pause that freezes the simulation, and set healthy natural lifespan to
   roughly 10 to 14 real days with earlier death from poor care.

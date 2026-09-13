@@ -126,6 +126,13 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   is marked in life history and never enters offline simulation.
 - Adults age naturally. Good care produces an expected total lifespan of
   roughly 10 to 14 real days; poor care and illness can end it earlier.
+- Every generation begins from the same Egg with no random or selected
+  predisposition. Care history alone determines the evolution branch.
+- Hall of Gotchi keeps the five most recent lives with name, species, age,
+  timing profile and cause of death.
+- Death first plays a short farewell scene and then opens a memorial screen
+  with portrait, name, age and care result. A new Egg starts only after player
+  confirmation.
 - Pet condition is presented as hearts on separate status pages. Exact 0-100
   values remain internal and are not shown to the player.
 
