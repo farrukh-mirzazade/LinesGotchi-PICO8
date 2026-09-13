@@ -114,6 +114,10 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   player begins a new Egg; generation count and discoveries remain saved.
 - Exact evolution conditions stay hidden. Players discover them through
   repeated generations rather than reading numeric requirements.
+- Accelerated mode reaches Adult after 60 minutes.
+- The player names each pet manually.
+- First-version creatures have no sex or breeding system. A new generation
+  begins from a new Egg after the previous life ends.
 
 ## Recommended Implementation Order
 

@@ -269,3 +269,5 @@ Commits already published:
 - Locked the first lifecycle decisions: dual timing profiles, Adult near day
   six, at most 12 hours of offline simulation, offline-death protection,
   permanent life endings with persistent history, and hidden evolution rules.
+- Set accelerated growth to 60 minutes, enabled player-entered pet names and
+  excluded sex and breeding from the first version.
