@@ -239,3 +239,16 @@ Commits already published:
   the tenth, non-selectable indicator.
 - Native suite now includes direct Records and Sound icon checks: 52 checks in
   total, plus the ten-cell screenshot assertion and Lines queue comparison.
+
+## 2026-09-13 - Baby Pet Face Polish
+
+- Kept the approved five-by-two menu positions and all care interactions
+  unchanged.
+- Rebuilt the shared 24x24 Baby silhouette as a clean symmetric circle without
+  arms, legs, a top tuft or a heavy lower rim.
+- Reworked all five expressions with rounded outlined eyes, smaller pupils and
+  clearer mouths. The happy state now uses a simple curved pixel smile.
+- Changed the monochrome LCD rendering to a light body with dark outlines and
+  facial features. The Lines side panel retains the full-colour blue version.
+- Native suite passes all 52 checks. `can_reach` and `clear_lines` hashes are
+  unchanged, and the ten-icon alignment assertion still passes.

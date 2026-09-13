@@ -53,15 +53,13 @@ def sprite(sid, rows):
 # Native 24x24 master. Expressions share one limb-free silhouette.
 def draw_pet_body(x0, y0):
     put(x0, y0, [
-        ".........11.............",
-        ".........1c1............",
-        "..........1c111.........",
-        ".......111cccc111.......",
-        ".....11cccccccccc11.....",
+        "........................",
+        "........11111111........",
+        "......11cccccccc11......",
+        ".....1cccccccccccc1.....",
         "....1cccccccccccccc1....",
         "...1cccccccccccccccc1...",
         "..1cccccccccccccccccc1..",
-        "..1cccccccccccccccccc1..",
         ".1cccccccccccccccccccc1.",
         ".1cccccccccccccccccccc1.",
         ".1cccccccccccccccccccc1.",
@@ -69,7 +67,6 @@ def draw_pet_body(x0, y0):
         ".1cccccccccccccccccccc1.",
         ".1cccccccccccccccccccc1.",
         ".1cccccccccccccccccccc1.",
-        "..1cccccccccccccccccc1..",
         "..1cccccccccccccccccc1..",
         "...1cccccccccccccccc1...",
         "....1cccccccccccccc1....",
@@ -77,11 +74,8 @@ def draw_pet_body(x0, y0):
         "......11cccccccc11......",
         "........11111111........",
         "........................",
+        "........................",
     ])
-    # One-pixel lower rim, not a dark belly.
-    for x, y in [(4,17),(5,18),(6,19),(7,20),(8,20),(9,21),
-                 (10,21),(11,21),(12,21),(13,21),(14,21),(15,20),(16,20),(17,19)]:
-        px(x0+x, y0+y, "d")
 
 def draw_face(x0, y0, expression):
     if expression == "sleepy":
@@ -89,24 +83,27 @@ def draw_face(x0, y0, expression):
             put(x0+x, y0+11, ["1....1", ".1111."])
     else:
         for x in (4,13):
-            put(x0+x, y0+8, [
-                "..777..",
-                ".77777.",
-                "7711177",
-                "7711117",
-                "7111117",
-                "7111117",
-                ".71117.",
-                "..777..",
+            put(x0+x, y0+9, [
+                "..111..",
+                ".17771.",
+                "1777771",
+                "1771171",
+                "1771171",
+                ".17771.",
+                "..111..",
             ])
     if expression == "hungry":
         put(x0+10,y0+17, [".11.", "1771", "1111"])
     elif expression == "sleepy":
         put(x0+10,y0+17, [".11.", "1..1"])
     elif expression == "excited":
-        put(x0+9,y0+17, ["111111", ".1881.", "..11.."])
+        put(x0+9,y0+16, [".1111.", "1....1", "1.88.1", ".1111."])
+    elif expression == "happy":
+        put(x0+9,y0+16, ["1....1", ".1..1.", "..11.."])
+    elif expression == "neutral":
+        put(x0+10,y0+18, ["1111"])
     else:
-        put(x0+10,y0+17, ["1111", ".81."])
+        put(x0+10,y0+17, [".11.", "1..1"])
 
 # Generate 5 pet faces side-by-side at x = 0, 24, 48, 72, 96, y = 0
 for idx, expr in enumerate(["happy", "neutral", "hungry", "sleepy", "excited"]):
