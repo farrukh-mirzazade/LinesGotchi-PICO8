@@ -115,11 +115,17 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
 - Exact evolution conditions stay hidden. Players discover them through
   repeated generations rather than reading numeric requirements.
 - Accelerated mode reaches Adult after 60 minutes.
+- The timing profile is selected for each new Egg and remains locked for that
+  generation.
 - The player names each pet manually.
 - Names contain at most six characters. An on-screen keyboard is always
   available; physical keyboard input is an optional fast path.
 - First-version creatures have no sex or breeding system. A new generation
   begins from a new Egg after the previous life ends.
+- A deliberate Pause mode freezes age and all needs indefinitely. Paused time
+  is marked in life history and never enters offline simulation.
+- Adults age naturally. Good care produces an expected total lifespan of
+  roughly 10 to 14 real days; poor care and illness can end it earlier.
 - Pet condition is presented as hearts on separate status pages. Exact 0-100
   values remain internal and are not shown to the player.
 

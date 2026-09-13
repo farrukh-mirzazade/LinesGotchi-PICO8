@@ -274,3 +274,6 @@ Commits already published:
 - Limited names to six characters and selected dual on-screen/physical
   keyboard entry. Status values will be displayed as hearts on separate pages,
   with exact numeric values kept internal.
+- Locked each Egg to its selected timing profile, added an explicit unlimited
+  Pause that freezes the simulation, and set healthy natural lifespan to
+  roughly 10 to 14 real days with earlier death from poor care.
