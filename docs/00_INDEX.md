@@ -1,6 +1,7 @@
-# LinesGotchi Index
+# PicoGotchi Index
 
-This folder is the Obsidian vault for LinesGotchi only.
+This folder is the Obsidian vault for the LinesGotchi project transitioning to
+PicoGotchi. It is separate from every BioGotchi vault and project.
 
 ## Documents
 
@@ -17,11 +18,12 @@ This folder is the Obsidian vault for LinesGotchi only.
 - [[11_FUNCTIONAL_AUDIT]]
 - [[12_DESIGN_CORRECTION]]
 - [[13_NATIVE_VISUAL_PASS]]
+- [[14_PICOGOTCHI_REFERENCE_ANALYSIS]]
 
 ## Current Status
 
-The native visual adaptation is implemented and awaiting visual acceptance.
-The current reproducible suite passes 51 focused native regression checks.
-Actual PICO-8 screenshots and fidelity limits are recorded in
-[[13_NATIVE_VISUAL_PASS]]. Earlier audit counts are historical, not evidence
-of exhaustive verification of this revision.
+The project is pivoting from LinesGotchi to PicoGotchi. Pet care, lifespan and
+branching evolution become the core product; Lines remains an optional
+mini-game. The supplied original virtual-pet references are analysed in
+[[14_PICOGOTCHI_REFERENCE_ANALYSIS]]. No gameplay code has been changed for
+this product-design step.

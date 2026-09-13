@@ -252,3 +252,17 @@ Commits already published:
   facial features. The Lines side panel retains the full-colour blue version.
 - Native suite passes all 52 checks. `can_reach` and `clear_lines` hashes are
   unchanged, and the ten-icon alignment assertion still passes.
+
+## 2026-09-13 - PicoGotchi Product Pivot References
+
+- Analysed eight user-supplied original virtual-pet reference images; two pairs
+  were exact duplicates, leaving six unique references.
+- Defined the new priority: pet care and branching evolution are the product;
+  Lines becomes one optional mini-game.
+- Selected the simpler Gen 1 care-driven tree as the feasible foundation.
+  Family groups, jobs and a large food catalogue remain later expansions.
+- Added [[14_PICOGOTCHI_REFERENCE_ANALYSIS]] with original-content boundaries,
+  a proposed roster, evolution inputs, save migration requirements and an
+  implementation order.
+- Updated the vault index and top-level TZ. No cartridge code, visuals or save
+  identifiers were changed in this documentation-only step.
