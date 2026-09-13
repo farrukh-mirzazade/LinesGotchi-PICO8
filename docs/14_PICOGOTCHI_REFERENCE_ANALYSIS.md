@@ -116,8 +116,12 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   repeated generations rather than reading numeric requirements.
 - Accelerated mode reaches Adult after 60 minutes.
 - The player names each pet manually.
+- Names contain at most six characters. An on-screen keyboard is always
+  available; physical keyboard input is an optional fast path.
 - First-version creatures have no sex or breeding system. A new generation
   begins from a new Egg after the previous life ends.
+- Pet condition is presented as hearts on separate status pages. Exact 0-100
+  values remain internal and are not shown to the player.
 
 ## Recommended Implementation Order
 

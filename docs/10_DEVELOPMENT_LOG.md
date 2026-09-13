@@ -271,3 +271,6 @@ Commits already published:
   permanent life endings with persistent history, and hidden evolution rules.
 - Set accelerated growth to 60 minutes, enabled player-entered pet names and
   excluded sex and breeding from the first version.
+- Limited names to six characters and selected dual on-screen/physical
+  keyboard entry. Status values will be displayed as hearts on separate pages,
+  with exact numeric values kept internal.
