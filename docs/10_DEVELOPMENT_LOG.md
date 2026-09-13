@@ -293,6 +293,8 @@ Commits already published:
 - Set happiness decay at 60/75/90/120 minutes by stage, game rewards at up to
   one heart for prediction or two for Lines, and numeric Weight with a healthy
   range that changes by stage.
+- Locked stage Weight ranges at 5-8/7-12/9-16/11-20, deterministic hidden
+  evolution and small persistent discovery bonuses for later generations.
 - Locked each Egg to its selected timing profile, added an explicit unlimited
   Pause that freezes the simulation, and set healthy natural lifespan to
   roughly 10 to 14 real days with earlier death from poor care.

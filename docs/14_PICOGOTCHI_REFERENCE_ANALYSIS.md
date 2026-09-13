@@ -164,6 +164,12 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   can restore up to two hearts according to the session result.
 - Weight is displayed numerically on Status. Its healthy range changes with
   growth stage instead of using a universal four-heart meter.
+- Healthy Weight ranges are Baby 5-8, Child 7-12, Teen 9-16 and Adult 11-20.
+- Evolution is deterministic: identical recorded care produces the same form,
+  although the numeric requirements remain hidden from players.
+- Discovered species provide small persistent benefits to later generations,
+  in addition to their Hall of Gotchi collection entry. The stacking model and
+  cap remain to be locked.
 
 ## Recommended Implementation Order
 
