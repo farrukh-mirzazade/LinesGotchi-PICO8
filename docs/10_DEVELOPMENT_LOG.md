@@ -277,6 +277,8 @@ Commits already published:
 - Locked a common starting Egg, five-entry Hall of Gotchi history, and a
   two-part death ending: short farewell scene followed by a memorial screen and
   explicit new-generation confirmation.
+- Locked four-heart condition displays, the classic Meal/Snack food scope and
+  two first-version mini-games: Lines plus one short classic-style game.
 - Locked each Egg to its selected timing profile, added an explicit unlimited
   Pause that freezes the simulation, and set healthy natural lifespan to
   roughly 10 to 14 real days with earlier death from poor care.

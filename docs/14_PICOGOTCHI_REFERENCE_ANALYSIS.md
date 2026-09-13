@@ -74,12 +74,10 @@ the general play and activity history.
 ## Food Scope
 
 The food catalogue demonstrates variety, but the first PicoGotchi release
-should use four original functional categories:
+uses the two classic functional categories:
 
 - Meal: fullness up, small weight gain.
 - Snack: happiness up, larger weight gain.
-- Healthy food: smaller fullness gain, supports health.
-- Treat: strong happiness gain with a weight and discipline tradeoff.
 
 More food sprites are a collection and animation expansion, not a prerequisite
 for the core loop.
@@ -135,6 +133,9 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   confirmation.
 - Pet condition is presented as hearts on separate status pages. Exact 0-100
   values remain internal and are not shown to the player.
+- Each visible condition meter uses four hearts.
+- The first release includes two mini-games: Lines and one short classic-style
+  guessing or reaction game.
 
 ## Recommended Implementation Order
 
