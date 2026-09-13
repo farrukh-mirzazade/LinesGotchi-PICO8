@@ -142,6 +142,12 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   required sleep duration depends on the current growth stage.
 - An unresolved Attention call repeats its sound every five minutes while the
   indicator continues blinking. The global sound setting still mutes calls.
+- Discipline is valid only for a false Attention call with no real unmet need.
+  Unjust discipline counts against care quality.
+- Illness requires between one and three medicine doses. Every dose gives
+  readable feedback so the player knows whether treatment must continue.
+- Up to three messes can remain on screen. Two uncleared messes can cause
+  illness, and Toilet clears the current messes together.
 
 ## Recommended Implementation Order
 
