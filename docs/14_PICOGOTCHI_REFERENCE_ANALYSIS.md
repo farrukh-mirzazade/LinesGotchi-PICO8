@@ -158,6 +158,12 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
 - An empty required condition starts a response window. A care mistake is
   recorded after 30 unresolved minutes in normal mode or five minutes in
   accelerated mode, not immediately when the heart empties.
+- In normal mode one happiness heart is lost every 60 minutes as Baby, 75 as
+  Child, 90 as Teen and 120 as Adult.
+- The five-round prediction game can restore up to one happiness heart. Lines
+  can restore up to two hearts according to the session result.
+- Weight is displayed numerically on Status. Its healthy range changes with
+  growth stage instead of using a universal four-heart meter.
 
 ## Recommended Implementation Order
 
