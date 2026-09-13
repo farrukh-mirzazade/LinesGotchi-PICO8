@@ -101,6 +101,20 @@ versioned save schema for current life, generation count and discovered forms.
 Changing the cartdata id without migration would hide existing saves, so the
 rename requires an explicit one-time migration from `linesgotchi_v2`.
 
+## Locked Lifecycle Decisions
+
+- Two timing profiles: a normal multi-day life and an accelerated test mode.
+- The normal profile reaches Baby after hatching, Child after one day, Teen
+  after three days and Adult after approximately six real days.
+- Time continues while the game is closed. On the next launch PicoGotchi
+  simulates no more than 12 hours of missed time.
+- Offline simulation may make needs critical, but it cannot directly kill the
+  pet: health stops at 1 and a short active-care grace period starts on load.
+- Death is permanent for the current pet. The life is added to history and the
+  player begins a new Egg; generation count and discoveries remain saved.
+- Exact evolution conditions stay hidden. Players discover them through
+  repeated generations rather than reading numeric requirements.
+
 ## Recommended Implementation Order
 
 1. Lock the PicoGotchi lifecycle and evolution thresholds.
@@ -109,4 +123,3 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
 4. Implement deterministic evolution tests before drawing the full roster.
 5. Produce original silhouettes and animation frames for approved branches.
 6. Add jobs and a larger food catalogue only after one full generation works.
-

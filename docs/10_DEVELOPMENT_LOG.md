@@ -266,3 +266,6 @@ Commits already published:
   implementation order.
 - Updated the vault index and top-level TZ. No cartridge code, visuals or save
   identifiers were changed in this documentation-only step.
+- Locked the first lifecycle decisions: dual timing profiles, Adult near day
+  six, at most 12 hours of offline simulation, offline-death protection,
+  permanent life endings with persistent history, and hidden evolution rules.
