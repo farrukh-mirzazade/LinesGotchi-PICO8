@@ -287,6 +287,9 @@ Commits already published:
   at two and a clear-all Toilet action.
 - Locked Meal refusal at full hunger, direct illness from excessive Snacks and
   removal of Energy in favour of local-time, stage-dependent sleep.
+- Set Snack illness at three consecutive Snacks without a Meal, stage-based
+  fullness decay at 45/60/75/90 minutes, and unresolved-need grace periods of
+  30 minutes normal or five minutes accelerated.
 - Locked each Egg to its selected timing profile, added an explicit unlimited
   Pause that freezes the simulation, and set healthy natural lifespan to
   roughly 10 to 14 real days with earlier death from poor care.

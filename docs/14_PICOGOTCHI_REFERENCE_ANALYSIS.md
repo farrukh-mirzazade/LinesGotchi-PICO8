@@ -149,10 +149,15 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
 - Up to three messes can remain on screen. Two uncleared messes can cause
   illness, and Toilet clears the current messes together.
 - A fully fed pet refuses Meal, preventing ordinary overfeeding.
-- Repeated Snacks directly cause illness; the exact threshold remains to be
-  locked. Snacks still increase happiness and weight.
+- Three consecutive Snacks without a Meal directly cause illness. Snacks still
+  increase happiness and weight; a Meal resets the consecutive-Snack counter.
 - Energy is removed as a separate stat. Sleep is determined entirely by local
   schedule and growth-stage duration.
+- In normal mode one fullness heart is lost every 45 minutes as Baby, 60 as
+  Child, 75 as Teen and 90 as Adult.
+- An empty required condition starts a response window. A care mistake is
+  recorded after 30 unresolved minutes in normal mode or five minutes in
+  accelerated mode, not immediately when the heart empties.
 
 ## Recommended Implementation Order
 
