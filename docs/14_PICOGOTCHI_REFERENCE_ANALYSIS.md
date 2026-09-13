@@ -148,6 +148,11 @@ rename requires an explicit one-time migration from `linesgotchi_v2`.
   readable feedback so the player knows whether treatment must continue.
 - Up to three messes can remain on screen. Two uncleared messes can cause
   illness, and Toilet clears the current messes together.
+- A fully fed pet refuses Meal, preventing ordinary overfeeding.
+- Repeated Snacks directly cause illness; the exact threshold remains to be
+  locked. Snacks still increase happiness and weight.
+- Energy is removed as a separate stat. Sleep is determined entirely by local
+  schedule and growth-stage duration.
 
 ## Recommended Implementation Order
 
